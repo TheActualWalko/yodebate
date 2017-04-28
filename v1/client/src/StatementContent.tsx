@@ -11,7 +11,6 @@ const mapStateToProps = (state, {id, debateID}) => {
 const StatementContent = ({id, text, date, debateID})=>(
   <div 
     className="statement-content" 
-    key={id}
   >
     <div className="statement-text">
       <main>

@@ -24,7 +24,6 @@ const Statement = ({id, debateID, authorID, isInitiatorStatement}) => (
           : 'responder-statement'
       }
     `} 
-    key={id}
     id={id}
   >
     <div className="statement-content-wrap">
