@@ -3,8 +3,8 @@ import {connect} from "react-redux";
 
 const mapStateToProps = (state, {id, debateID}) => {
   return {
-    text: state.statements[id].text,
-    date: state.statements[id].date,
+    text: state.getIn(["statements", id, "text"]),
+    date: state.getIn(["statements", id, "date"]),
   };
 };
 

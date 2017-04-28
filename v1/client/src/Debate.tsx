@@ -6,7 +6,7 @@ import {rebuttalCharLimit, openingStatementCharLimit} from './limits';
 import {connect} from "react-redux";
 
 const mapStateToProps = (state, {id})=>{
-  const currentDebate = state.debates[id];
+  const currentDebate = state.getIn(["debates",id]).toJS();
   if (!currentDebate) {
     return {
       myTurn: false,
@@ -17,7 +17,7 @@ const mapStateToProps = (state, {id})=>{
       rebuttalIDs: []
     }
   }
-  const {activeUserID} = state;
+  const activeUserID = state.get("activeUserID");
   const {
     rebuttalIDs, 
     openingStatementIDs, 

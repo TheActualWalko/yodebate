@@ -2,7 +2,7 @@ import React = require("react");
 import {connect} from "react-redux";
 
 const mapStateToProps = (state, {id})=>{
-  if (!state.authors[id]) {
+  if (!state.getIn(["authors", id])) {
     return {
       imageURL: "",
       name: "",
@@ -11,9 +11,9 @@ const mapStateToProps = (state, {id})=>{
   }
 
   return {
-    imageURL: state.authors[id].imageURL,
-    name: state.authors[id].name,
-    description: state.authors[id].description,
+    imageURL: state.getIn(["authors", id, "imageURL"]),
+    name: state.getIn(["authors", id, "name"]),
+    description: state.getIn(["authors", id, "description"]),
   };
 };
 

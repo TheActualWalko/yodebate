@@ -5,11 +5,11 @@ import {rebuttalCharLimit, openingStatementCharLimit} from './limits';
 import {connect} from "react-redux";
 
 const mapStateToProps = (state, {debateID, isRebuttal}) => {
-  const currentDebate = state.debates[debateID];
+  const currentDebate = state.getIn(["debates", debateID]).toJS();
   const { rebuttalIDs, openingStatementIDs, newStatementText } = currentDebate;
   const allStatementIDs = [...openingStatementIDs, ...rebuttalIDs];
   return {
-    authorID: state.activeUserID,
+    authorID: state.get("activeUserID"),
     isInitiatorStatement: (allStatementIDs.length % 2 === 0),
     newStatementText,
     isRebuttal

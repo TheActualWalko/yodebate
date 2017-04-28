@@ -4,10 +4,9 @@ import Author from "./Author";
 import {connect} from "react-redux";
 
 const mapStateToProps = (state, {id, debateID}) => {
-  const {openingStatementIDs, rebuttalIDs} = state.debates[debateID];
+  const {openingStatementIDs, rebuttalIDs, initiatorID, responderID} = state.getIn(["debates", debateID]).toJS();
   const allStatementIDs = [...openingStatementIDs, ...rebuttalIDs];
   const isInitiatorStatement = (allStatementIDs.indexOf(id) % 2 === 0);
-  const {initiatorID, responderID} = state.debates[debateID];
   const authorID = isInitiatorStatement ? initiatorID : responderID;
   return {
     authorID,
