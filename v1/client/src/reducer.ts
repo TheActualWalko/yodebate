@@ -64,7 +64,7 @@ export default (state=initialState, {type, payload})=>{
         .concat(state.getIn(["debates", payload, "rebuttalIDs"]).toJS())
         .concat([0])
       ) + 1; // TODO
-      const next = state
+      return state
         .setIn(["debates", payload, "newStatementText"], "")
         .setIn(
           ["debates", payload, statementIDsKey],
@@ -80,7 +80,6 @@ export default (state=initialState, {type, payload})=>{
           })
         )
         .set("activeUserID", state.get("activeUserID") === 1 ? 2 : 1);
-      return next;
     default:
       return state;
   }
