@@ -1,14 +1,5 @@
 import {Map, List, fromJS} from 'immutable';
 
-const assign = (x,y)=>{
-  return Object["assign"]({},x,y);
-};
-
-const longText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem itaque esse est eum tempore, hic quibusdam ducimus ipsum, quos nam autem rem, magni libero consequatur voluptatem id deleniti repudiandae odit iusto ad nostrum perferendis obcaecati officiis nisi deserunt! Deleniti sit omnis iure dolor, totam perferendis magnam voluptas porro culpa aliquid?";
-
-const shortText = "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem itaque esse est eum tempore, hic quibusdam ducimus ipsum, quos nam autem rem, magni libero consequatur voluptatem id deleniti repudiandae odit iusto ad nostrum perfer?";
-
-
 const initialState = Map({
   activeDebateID: 1,
   activeUserID: 1,
