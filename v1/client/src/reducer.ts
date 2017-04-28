@@ -1,5 +1,20 @@
 import {Map, List, fromJS} from 'immutable';
 
+const getNextDebateID = (state, debateID) => {
+  return Math.max.apply(
+    Math, 
+    state.getIn(["debates", debateID, "openingStatementIDs"]).toJS()
+    .concat(state.getIn(["debates", debateID, "rebuttalIDs"]).toJS())
+    .concat([0])
+  ) + 1;
+}
+
+const getStatementIDsKey = (state, debateID) => {
+  return state.getIn(["debates", debateID, "openingStatementIDs"]).toJS().length < 2 
+    ? "openingStatementIDs" 
+    : "rebuttalIDs";
+}
+
 const initialState = Map({
   activeDebateID: 1,
   activeUserID: 1,
@@ -46,15 +61,8 @@ export default (state=initialState, {type, payload})=>{
         payload.text
       );
     case "SUBMIT_NEW_STATEMENT":
-      const statementIDsKey = state.getIn(["debates", payload, "openingStatementIDs"]).toJS().length < 2 
-        ? "openingStatementIDs" 
-        : "rebuttalIDs";
-      const newStatementID = Math.max.apply(
-        Math, 
-        state.getIn(["debates", payload, "openingStatementIDs"]).toJS()
-        .concat(state.getIn(["debates", payload, "rebuttalIDs"]).toJS())
-        .concat([0])
-      ) + 1; // TODO
+      const statementIDsKey = getStatementIDsKey(state, payload);
+      const newStatementID = getNextDebateID(state, payload);
       return state
         .setIn(["debates", payload, "newStatementText"], "")
         .setIn(
