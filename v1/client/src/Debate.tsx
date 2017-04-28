@@ -4,116 +4,63 @@ import Statement from "./Statement";
 import NewStatement from "./NewStatement";
 import {rebuttalCharLimit, openingStatementCharLimit} from './limits';
 import {connect} from "react-redux";
+import {List} from "immutable";
+import {createStructuredSelector} from "reselect";
+import {
+  getIsMyTurn, 
+  getNeedPositionStatement, 
+  getNeedOpeningStatement,
+  getHaveAllOpeningStatements,
+  getOpeningStatementIDs,
+  getRebuttalIDs,
+  getDebate
+} from './selectors'
 
-const mapStateToProps = (state, {id})=>{
-  const currentDebate = state.getIn(["debates",id]).toJS();
-  if (!currentDebate) {
-    return {
-      myTurn: false,
-      needPositionStatement: false,
-      needOpeningStatement: false,
-      openingStatementIDs: [],
-      haveAllOpeningStatements: false,
-      rebuttalIDs: []
-    }
+const mapStateToProps = (state, {id}) => createStructuredSelector({
+  isMyTurn: getIsMyTurn(id),
+  needPositionStatement: getNeedPositionStatement(id),
+  needOpeningStatement: getNeedOpeningStatement(id),
+  haveAllOpeningStatements: getHaveAllOpeningStatements(id),
+  openingStatementIDs: getOpeningStatementIDs(id),
+  rebuttalIDs: getRebuttalIDs(id)
+})(state);
+
+const getOpeningStatementsAnnotation = ({needPositionStatement})=>{
+  return !needPositionStatement 
+    && <Annotation title="Opening Statements" subtitle="500 characters each" />;
+}
+
+const getOpeningStatements = ({needOpeningStatement, id, openingStatementIDs})=>{
+  return needOpeningStatement
+    && <NewStatement debateID={id} isRebuttal={false} /> 
+    || openingStatementIDs.map(statementID => <Statement debateID={id} id={statementID} key={statementID} />);
+}
+
+const getRebuttalsAnnotation = ({haveAllOpeningStatements})=>{
+  return haveAllOpeningStatements
+    && <Annotation title="Rebuttals" subtitle="250 characters each" />;
+}
+
+const getRebuttals = ({haveAllOpeningStatements, rebuttalIDs, id})=>{
+  return haveAllOpeningStatements
+    && rebuttalIDs.map(statementID => <Statement debateID={id} id={statementID} key={statementID} />) 
+}
+
+const getNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, isMyTurn, id})=>{
+  if (haveAllOpeningStatements) {
+    return isMyTurn
+      ? <NewStatement debateID={id} isRebuttal={true} />
+      : <Annotation title="That's all right now" subtitle="We'll notify you when your opponent responds" />;
   }
-  const activeUserID = state.get("activeUserID");
-  const {
-    rebuttalIDs, 
-    openingStatementIDs, 
-    initiatorID, 
-    responderID, 
-    isOver,
-    positionStatements
-  } = currentDebate;
-  const allStatementIDs = [...openingStatementIDs, ...rebuttalIDs];
-  const isInitiator = activeUserID === initiatorID;
-  const isResponder = activeUserID === responderID;
-  let myTurn = false;
-  if (
-    !isOver
-    &&
-    (
-      (isInitiator && (allStatementIDs.length % 2) === 0)
-      ||
-      (isResponder && (allStatementIDs.length % 2) === 1)
-    )
-  ) {
-    myTurn = true;
-  }
+}
 
-  const needPositionStatement = !(
-    (isInitiator && !!positionStatements.initiator)
-    ||
-    (isResponder && !!positionStatements.responder)
-  );
-
-  const haveAllOpeningStatements = openingStatementIDs.length === 2;
-
-  const needOpeningStatement = !(
-    (isInitiator && openingStatementIDs.length >= 1)
-    ||
-    (isResponder && haveAllOpeningStatements)
-  );
-
-  return {
-    myTurn,
-    needPositionStatement,
-    needOpeningStatement,
-    openingStatementIDs,
-    haveAllOpeningStatements,
-    rebuttalIDs
-  };
-};
-
-const Debate = ({
-  id,
-  myTurn,
-  needPositionStatement,
-  needOpeningStatement,
-  haveAllOpeningStatements,
-  openingStatementIDs,
-  rebuttalIDs
-})=>(
+const Debate = (props)=>(
   <div className="debate">
-    { 
-      !needPositionStatement
-      && 
-      <Annotation 
-        title="Opening Statements" 
-        subtitle="500 characters each" 
-      /> 
-    }
-    { 
-      needOpeningStatement
-      && 
-      <NewStatement debateID={id} isRebuttal={false} /> 
-      ||
-      openingStatementIDs.map(statement => <Statement debateID={id} id={statement} />)
-    }
-    { 
-      haveAllOpeningStatements
-      &&
-      <Annotation 
-        title="Rebuttals" 
-        subtitle="250 characters each" 
-      /> 
-    }
-    { 
-      haveAllOpeningStatements
-      &&
-      rebuttalIDs.map(statement => <Statement debateID={id} id={statement} />) 
-    }
-    { 
-      (myTurn && haveAllOpeningStatements)
-      && 
-      <NewStatement debateID={id} isRebuttal={true} /> 
-      ||
-      (haveAllOpeningStatements && <Annotation 
-        title="That's all right now" 
-        subtitle="We'll notify you when your opponent responds" 
-      />)
-    }
+    { getOpeningStatementsAnnotation(props) }
+    { getOpeningStatements(props) }
+    { getRebuttalsAnnotation(props) }
+    { getRebuttals(props) }
+    { getNewRebuttalOrFinalAnnotation(props) }
   </div>
 );
 
