@@ -74,6 +74,8 @@ export default (state=initialState, {type, payload})=>{
         .setIn(
           ["statements", newStatementID], 
           Map({
+            debateID: payload,
+            authorID: state.get("activeUserID"),
             text: state.getIn(["debates", payload, "newStatementText"]),
             date: new Date().getTime()
           })
