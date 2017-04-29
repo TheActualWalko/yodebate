@@ -123,3 +123,13 @@ export const getNeedOpeningStatement = debateID => createSelector(
     }
   }
 );
+
+export const getInitiatorPositionStatement = debateID => createSelector(
+  getPositionStatements(debateID),
+  statements => statements.get('initiator')
+);
+
+export const getResponderPositionStatement = debateID => createSelector(
+  getPositionStatements(debateID),
+  statements => statements.get('responder')
+);
