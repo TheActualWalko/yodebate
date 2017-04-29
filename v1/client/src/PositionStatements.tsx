@@ -51,7 +51,13 @@ const renderInitiatorStatement = ({
   if (!!initiatorStatement) {
     return <h3><span>{initiatorStatement}</span></h3>
   } else if (activeUserIsInitiator) {
-    return <Editor text={newStatementText} limit={140} textChanged={textChanged} submitClicked={submitClicked} />
+    return <Editor 
+      text={newStatementText} 
+      limit={140} 
+      textChanged={textChanged} 
+      submitClicked={submitClicked} 
+      placeholder="State your position"
+    />
   } else {
     return <h3 className="ghost"><span>Unstated</span></h3>
   }
@@ -68,7 +74,13 @@ const renderResponderStatement = ({
   if (!!responderStatement) {
     return <h3><span>{responderStatement}</span></h3>
   } else if (activeUserIsResponder) {
-    return <Editor text={newStatementText} limit={140} textChanged={textChanged} submitClicked={submitClicked} />
+    return <Editor 
+      text={newStatementText} 
+      limit={140} 
+      textChanged={textChanged} 
+      submitClicked={submitClicked} 
+      placeholder="State your position"
+    />
   } else if (activeUserIsInitiator) {
     return <h3 className="ghost"><span>Your opponent will state their competing position</span></h3>
   } else {
