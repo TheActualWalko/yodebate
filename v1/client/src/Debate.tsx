@@ -36,10 +36,14 @@ const renderOpeningStatementsAnnotation = ({needPositionStatement})=>{
     && <Annotation title="Opening Statements" subtitle="500 characters each" />;
 }
 
-const renderOpeningStatements = ({needOpeningStatement, id, openingStatementIDs})=>{
-  return needOpeningStatement
-    && <NewStatement debateID={id} isRebuttal={false} /> 
-    || openingStatementIDs.map(statementID => <Statement debateID={id} id={statementID} key={statementID} />);
+const renderOpeningStatements = ({needPositionStatement, needOpeningStatement, id, openingStatementIDs})=>{
+  if (needPositionStatement) {
+    return null;
+  } else if (needOpeningStatement) {
+    return <NewStatement debateID={id} isRebuttal={false} /> 
+  } else { 
+    return openingStatementIDs.map(statementID => <Statement debateID={id} id={statementID} key={statementID} />);
+  }
 }
 
 const renderRebuttalsAnnotation = ({haveAllOpeningStatements})=>{

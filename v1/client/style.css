@@ -12,6 +12,10 @@ a, a:link, a:visited {
   color: #4990e2;
 }
 
+textarea {
+  font-family: inherit;
+}
+
 body {
   font-family: "PT Sans";
   color: #333;
@@ -19,7 +23,7 @@ body {
   padding: 0;
 }
 
-p, textarea, .annotation h5 {
+p, .statement textarea, .annotation h5 {
   font-family: "PT Serif";
   font-weight: 400;
 }
@@ -70,7 +74,7 @@ p, textarea, .annotation h5 {
   top: 60px;
 }
 
-.position-statements .initiator-position-statement {
+.initiator-position-statement {
   color: #eb6302;
   text-align: right;
   padding-right: 35px;
@@ -78,17 +82,17 @@ p, textarea, .annotation h5 {
 }
 
 
-.position-statements .responder-position-statement {
+.responder-position-statement {
   color: #4965e2;
   text-align: left;
   padding-left: 35px;
   right: 0;
 }
 
-.position-statements .position-statement h3 {
+.position-statement h3,
+.position-statement .editor {
   min-height: 150px;
   font-size: 42px;
-  padding: 37px 35px 33px 35px;
   background-color: white;
   box-shadow: 15px 15px 0 0 rgba(0,0,0,0.15);
   display: flex;
@@ -96,17 +100,56 @@ p, textarea, .annotation h5 {
   justify-content: center;
 }
 
-.position-statements .position-statement h3 span {
+.position-statement h3 {
+  padding: 3px 25px 0px 25px; /*padding subtracts width of singlequote*/
+}
+
+.position-statement h3.ghost {
+  padding: 3px 35px 0px 35px;
+}
+
+.position-statement .editor {
+  padding: 3px 35px 0px 35px;
+  position: relative;
+}
+
+.position-statement .editor footer {
+  left: 35px;
+  right: 35px;
+}
+
+.position-statement .editor textarea {
+  resize: none;
+  font-weight: 600;
+  padding-bottom: 0;
+}
+
+.position-statement .editor textarea::-webkit-input-placeholder {
+  font-weight: 600;
+}
+
+.position-statement h3 span {
   display: block;
   width: 100%;
 }
 
-.position-statements .position-statement h3 span:before {
-  content:"“";
+.position-statement h3 span:before {
+  content:"'";
 }
 
-.position-statements .position-statement h3 span:after {
-  content:"”";
+.position-statement h3 span:after {
+  content:"'";
+}
+
+.position-statement h3.ghost {
+  background-color: rgba(0,0,0,0.15);
+  box-shadow: none;
+  color: white;
+}
+
+.position-statement h3.ghost span:before,
+.position-statement h3.ghost span:after {
+  content: ""
 }
 
 .annotation-wrap {
@@ -132,12 +175,14 @@ p, textarea, .annotation h5 {
   margin-bottom: 10px;
 }
 
-.statement-content footer {
+.statement-content footer,
+.editor footer {
   font-size: 12px;
   color: #939393;
 }
 
-.statement-content footer *+* {
+.statement-content footer *+*,
+.editor footer *+* {
   margin-left: 35px;
 }
 
@@ -174,7 +219,7 @@ p, textarea, .annotation h5 {
   padding-bottom: 11px;
 }
 
-.new-statement textarea {
+.editor textarea {
   width: 100%;
   resize: vertical;
   border: none;
@@ -183,22 +228,24 @@ p, textarea, .annotation h5 {
   margin-bottom: 0;
 }
 
-.new-statement textarea:focus {
+.editor textarea:focus {
   outline: none;
 }
 
-.new-statement textarea::-webkit-input-placeholder {
+.editor textarea::-webkit-input-placeholder {
   color: #AAA;
 }
 
-.new-statement footer {
+.new-statement footer,
+.editor footer {
   position: absolute;
   bottom: 15px;
   left: 15px;
   right: 15px;
 }
 
-.new-statement footer button {
+.new-statement footer button,
+.editor footer button {
   border: none;
   padding: 0;
   background: none;
@@ -213,7 +260,8 @@ p, textarea, .annotation h5 {
   margin-left: -45px;
 }
 
-.new-statement footer button:hover {
+.new-statement footer button:hover,
+.editor footer button:hover {
   cursor: pointer;
   background-color: rgba(73, 144, 226, 0.2);
 }

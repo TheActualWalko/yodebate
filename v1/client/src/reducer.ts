@@ -34,8 +34,8 @@ const initialState = Map({
       initiatorID: 1,
       responderID: 2,
       positionStatements: Map({
-        initiator: "I eat dogs",
-        responder: "I am dog"
+        initiator: null,
+        responder: null
       }),
       openingStatementIDs: List(),
       rebuttalIDs: List(),

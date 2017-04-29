@@ -28,6 +28,7 @@ const makeStatementGetter = (key, def = null) => (statementId, trueDef = def) =>
 export const getIsOver = makeDebateGetter("isOver", false);
 export const getInitiatorID = makeDebateGetter("initiatorID", null);
 export const getResponderID = makeDebateGetter("responderID", null);
+export const getNewStatementText = makeDebateGetter("newStatementText", null);
 export const getPositionStatements = makeDebateGetter("positionStatements", Map({
   initiator: null,
   responder: null
@@ -92,15 +93,16 @@ export const getIsActiveUserTurn = debateID => createSelector(
 
 export const getNeedPositionStatement = debateID => createSelector(
   [
-    getPositionStatements(debateID),
+    getInitiatorPositionStatement(debateID),
+    getResponderPositionStatement(debateID),
     getActiveUserIsInitiator(debateID),
     getActiveUserIsResponder(debateID)
   ],
-  (positionStatements: any, isInitiator, isResponder) => {
+  (initiatorStatement, responderStatement, isInitiator, isResponder) => {
     if (isInitiator) {
-      return !positionStatements.get("initiator");
+      return !initiatorStatement;
     } else if (isResponder) {
-      return !positionStatements.get("responder");
+      return !responderStatement;
     } else {
       return false;
     }
