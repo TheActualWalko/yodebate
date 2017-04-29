@@ -20,8 +20,8 @@ const Statement = ({id, debateID, authorID, isInitiatorStatement}) => (
       statement 
       ${
         isInitiatorStatement 
-          ? 'initiator-statement' 
-          : 'responder-statement'
+          ? "initiator-statement" 
+          : "responder-statement"
       }
     `} 
     id={id}
