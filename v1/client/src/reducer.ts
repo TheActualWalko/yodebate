@@ -15,6 +15,16 @@ const getStatementIDsKey = (state, debateID) => {
     : "rebuttalIDs";
 }
 
+const getActiveUserRole = (state, debateID) => {
+  if (state.getIn(["debates", debateID, "initiatorID"]) === state.get("activeUserID")) {
+    return "initiator";
+  } else if (state.getIn(["debates", debateID, "responderID"]) === state.get("activeUserID")) {
+    return "responder";
+  } else {
+    return null;
+  }
+};
+
 const initialState = Map({
   activeDebateID: 1,
   activeUserID: 1,
@@ -60,6 +70,14 @@ export default (state=initialState, {type, payload})=>{
         ], 
         payload.text
       );
+    case "SUBMIT_POSITION_STATEMENT":
+    const activeUserRole = getActiveUserRole(state, payload);
+      return state
+        .setIn(["debates", payload, "newStatementText"], "")
+        .setIn(
+          ["debates", payload, "positionStatements", activeUserRole],
+          state.getIn(["debates", payload, "newStatementText"])
+        );
     case "SUBMIT_NEW_STATEMENT":
       const statementIDsKey = getStatementIDsKey(state, payload);
       const newStatementID = getNextDebateID(state, payload);
