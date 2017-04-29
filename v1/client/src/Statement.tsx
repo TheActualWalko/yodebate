@@ -2,17 +2,13 @@ import React = require("react");
 import StatementContent from "./StatementContent";
 import Author from "./Author";
 import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
+import {getAuthorID, getIsInitiatorStatement} from "./selectors";
 
-const mapStateToProps = (state, {id, debateID}) => {
-  const {openingStatementIDs, rebuttalIDs, initiatorID, responderID} = state.getIn(["debates", debateID]).toJS();
-  const allStatementIDs = [...openingStatementIDs, ...rebuttalIDs];
-  const isInitiatorStatement = (allStatementIDs.indexOf(id) % 2 === 0);
-  const authorID = isInitiatorStatement ? initiatorID : responderID;
-  return {
-    authorID,
-    isInitiatorStatement
-  };
-};
+const mapStateToProps = (state, {id, debateID}) => createStructuredSelector({
+  authorID: getAuthorID(id),
+  isInitiatorStatement: getIsInitiatorStatement(id)
+})(state);
 
 const Statement = ({id, debateID, authorID, isInitiatorStatement}) => (
   <article 
