@@ -219,6 +219,10 @@ p, .statement textarea, .annotation h5 {
   padding-bottom: 11px;
 }
 
+.new-statement .statement-content textarea {
+  min-height: 150px;
+}
+
 .editor textarea {
   width: 100%;
   resize: vertical;
