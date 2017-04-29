@@ -1,9 +1,9 @@
 import {createSelector} from "reselect";
 import {List, Map} from "immutable";
 
-export const getDebates = state => state.get('debates', Map())
-export const getActiveUserID = state => state.get('activeUserID', null);
+export const getDebates = state => state.get("debates", Map());
 export const getStatements = state => state.get("statements", Map());
+export const getActiveUserID = state => state.get("activeUserID", null);
 
 export const getDebate = debateID => createSelector(
   getDebates,
