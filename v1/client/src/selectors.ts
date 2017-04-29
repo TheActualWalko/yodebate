@@ -42,7 +42,7 @@ export const getStatementDebate = statementID => createSelector(
   (debateID, debates) => debates.get(debateID, null)
 );
 export const getIsInitiatorStatement = statementID => createSelector(
-  [getAuthorID, getStatementDebate],
+  [getAuthorID(statementID), getStatementDebate(statementID)],
   (authorID, debate) => authorID === debate.get("initiatorID")
 );
 
