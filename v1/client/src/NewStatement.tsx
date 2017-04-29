@@ -1,7 +1,7 @@
 import React = require("react");
 import Author from "./Author";
 import EditableStatementContent from "./EditableStatementContent";
-import {rebuttalCharLimit, openingStatementCharLimit} from './limits';
+import {rebuttalCharLimit, openingStatementCharLimit} from "./limits";
 import {connect} from "react-redux";
 
 const mapStateToProps = (state, {debateID, isRebuttal}) => {
@@ -50,8 +50,8 @@ const NewStatement = ({
       new-statement 
       ${
         isInitiatorStatement 
-          ? 'initiator-statement' 
-          : 'responder-statement'
+          ? "initiator-statement" 
+          : "responder-statement"
       }
     `} 
   >

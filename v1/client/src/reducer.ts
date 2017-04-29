@@ -1,4 +1,4 @@
-import {Map, List, fromJS} from 'immutable';
+import {Map, List, fromJS} from "immutable";
 
 const getNextDebateID = (state, debateID) => {
   return Math.max.apply(

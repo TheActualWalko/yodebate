@@ -1,5 +1,5 @@
 import {createSelector} from "reselect";
-import {List, Map} from 'immutable';
+import {List, Map} from "immutable";
 
 export const getDebates = state => state.get('debates', Map())
 export const getActiveUserID = state => state.get('activeUserID', null);
@@ -14,15 +14,15 @@ const makeDebateGetter = (key, def = null) => (debateId, trueDef = def) => creat
   debate => debate.get(key, trueDef)
 )
 
-export const getIsOver = makeDebateGetter('isOver', false);
-export const getInitiatorID = makeDebateGetter('initiatorID', null);
-export const getResponderID = makeDebateGetter('responderID', null);
-export const getPositionStatements = makeDebateGetter('positionStatements', Map({
+export const getIsOver = makeDebateGetter("isOver", false);
+export const getInitiatorID = makeDebateGetter("initiatorID", null);
+export const getResponderID = makeDebateGetter("responderID", null);
+export const getPositionStatements = makeDebateGetter("positionStatements", Map({
   initiator: null,
   responder: null
 }));
-export const getOpeningStatementIDs = makeDebateGetter('openingStatementIDs', List());
-export const getRebuttalIDs = makeDebateGetter('rebuttalIDs', List());
+export const getOpeningStatementIDs = makeDebateGetter("openingStatementIDs", List());
+export const getRebuttalIDs = makeDebateGetter("rebuttalIDs", List());
 
 export const getHaveAllOpeningStatements = debateID => createSelector(
   getOpeningStatementIDs(debateID),
@@ -38,22 +38,22 @@ export const getAllStatementIDs = debateID => createSelector(
     openingStatementIDs.concat(rebuttalIDs)
 );
 
-export const getIsInitiator = debateID => createSelector(
+export const getActiveUserIsInitiator = debateID => createSelector(
   [getActiveUserID, getInitiatorID(debateID)],
   (activeUserID, initiatorID) => activeUserID !== null && activeUserID === initiatorID
 );
 
-export const getIsResponder = debateID => createSelector(
+export const getActiveUserIsResponder = debateID => createSelector(
   [getActiveUserID, getResponderID(debateID)],
   (activeUserID, responderID) => activeUserID !== null && activeUserID === responderID
 );
 
-export const getIsMyTurn = debateID => createSelector(
+export const getIsActiveUserTurn = debateID => createSelector(
   [
     getIsOver(debateID), 
     getAllStatementIDs(debateID),
-    getIsInitiator(debateID),
-    getIsResponder(debateID)
+    getActiveUserIsInitiator(debateID),
+    getActiveUserIsResponder(debateID)
   ],
   (isOver, allStatementIDs, isInitiator, isResponder) => {
     if (isOver) {
@@ -71,14 +71,14 @@ export const getIsMyTurn = debateID => createSelector(
 export const getNeedPositionStatement = debateID => createSelector(
   [
     getPositionStatements(debateID),
-    getIsInitiator(debateID),
-    getIsResponder(debateID)
+    getActiveUserIsInitiator(debateID),
+    getActiveUserIsResponder(debateID)
   ],
   (positionStatements: any, isInitiator, isResponder) => {
     if (isInitiator) {
-      return !positionStatements.get('initiator');
+      return !positionStatements.get("initiator");
     } else if (isResponder) {
-      return !positionStatements.get('responder');
+      return !positionStatements.get("responder");
     } else {
       return false;
     }
@@ -88,8 +88,8 @@ export const getNeedPositionStatement = debateID => createSelector(
 export const getNeedOpeningStatement = debateID => createSelector(
   [
     getOpeningStatementIDs(debateID),
-    getIsInitiator(debateID),
-    getIsResponder(debateID)
+    getActiveUserIsInitiator(debateID),
+    getActiveUserIsResponder(debateID)
   ],
   (openingStatementIDs, isInitiator, isResponder) => {
     if (isInitiator) {

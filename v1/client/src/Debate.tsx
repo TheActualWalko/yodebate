@@ -2,22 +2,22 @@ import React = require("react");
 import Annotation from "./Annotation";
 import Statement from "./Statement";
 import NewStatement from "./NewStatement";
-import {rebuttalCharLimit, openingStatementCharLimit} from './limits';
+import {rebuttalCharLimit, openingStatementCharLimit} from "./limits";
 import {connect} from "react-redux";
 import {List} from "immutable";
 import {createStructuredSelector} from "reselect";
 import {
-  getIsMyTurn, 
+  getIsActiveUserTurn, 
   getNeedPositionStatement, 
   getNeedOpeningStatement,
   getHaveAllOpeningStatements,
   getOpeningStatementIDs,
   getRebuttalIDs,
   getDebate
-} from './selectors'
+} from "./selectors"
 
 const mapStateToProps = (state, {id}) => createStructuredSelector({
-  isMyTurn: getIsMyTurn(id),
+  isMyTurn: getIsActiveUserTurn(id),
   needPositionStatement: getNeedPositionStatement(id),
   needOpeningStatement: getNeedOpeningStatement(id),
   haveAllOpeningStatements: getHaveAllOpeningStatements(id),
