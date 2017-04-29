@@ -3,15 +3,26 @@ import {List, Map} from "immutable";
 
 export const getDebates = state => state.get('debates', Map())
 export const getActiveUserID = state => state.get('activeUserID', null);
+export const getStatements = state => state.get("statements", Map());
 
 export const getDebate = debateID => createSelector(
   getDebates,
   debates => debates.get(debateID, null)
 );
 
+export const getStatement = statementID => createSelector(
+  getStatements,
+  statements => statements.get(statementID, null)
+);
+
 const makeDebateGetter = (key, def = null) => (debateId, trueDef = def) => createSelector(
   getDebate(debateId),
   debate => debate.get(key, trueDef)
+)
+
+const makeStatementGetter = (key, def = null) => (statementId, trueDef = def) => createSelector(
+  getStatement(statementId),
+  statement => statement.get(key, trueDef)
 )
 
 export const getIsOver = makeDebateGetter("isOver", false);
@@ -23,6 +34,17 @@ export const getPositionStatements = makeDebateGetter("positionStatements", Map(
 }));
 export const getOpeningStatementIDs = makeDebateGetter("openingStatementIDs", List());
 export const getRebuttalIDs = makeDebateGetter("rebuttalIDs", List());
+
+export const getAuthorID = makeStatementGetter("authorID", null);
+export const getDebateID = makeStatementGetter("debateID", null);
+export const getStatementDebate = statementID => createSelector(
+  [getDebateID(statementID), getDebates],
+  (debateID, debates) => debates.get(debateID, null)
+);
+export const getIsInitiatorStatement = statementID => createSelector(
+  [getAuthorID, getStatementDebate],
+  (authorID, debate) => authorID === debate.get("initiatorID")
+);
 
 export const getHaveAllOpeningStatements = debateID => createSelector(
   getOpeningStatementIDs(debateID),
