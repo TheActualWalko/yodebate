@@ -114,6 +114,7 @@ p, .statement textarea, .annotation h5 {
 }
 
 .position-statement .editor footer {
+  text-align: left;
   left: 35px;
   right: 35px;
 }
