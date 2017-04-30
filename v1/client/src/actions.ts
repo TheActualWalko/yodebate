@@ -1,7 +1,3 @@
-"SET_NEW_STATEMENT_TEXT"
-"SUBMIT_POSITION_STATEMENT"
-"SUBMIT_NEW_STATEMENT"
-
 export const setNewStatementText = (debateID, text) => {
   return {
     type: "SET_NEW_STATEMENT_TEXT",
