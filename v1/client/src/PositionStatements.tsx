@@ -10,6 +10,7 @@ import {
   getActiveUserIsResponder,
   getNewStatementText
 } from './selectors';
+import {setNewStatementText, submitPositionStatement} from "./actions";
 
 
 const mapStateToProps = (state, {debateID}) => createStructuredSelector({
@@ -23,19 +24,13 @@ const mapStateToProps = (state, {debateID}) => createStructuredSelector({
 const mapDispatchToProps = (dispatch, {debateID, isRebuttal}) => {
   return {
     textChanged: (event)=>{
-      dispatch({
-        type: "SET_NEW_STATEMENT_TEXT",
-        payload: {
-          text: event.nativeEvent.target.value,
-          debateID
-        }
-      });
+      dispatch(setNewStatementText(
+        debateID, 
+        event.nativeEvent.target.value.replace(/[\r\n\v]+/g, '')
+      ));
     },
     submitClicked: (event)=>{
-      dispatch({
-        type: "SUBMIT_POSITION_STATEMENT",
-        payload: debateID
-      });
+      dispatch(submitPositionStatement(debateID));
     }
   }
 }
@@ -49,17 +44,17 @@ const renderInitiatorStatement = ({
   newStatementText
 }) => {
   if (!!initiatorStatement) {
-    return <h3><span>{initiatorStatement}</span></h3>
+    return <h3><span>{initiatorStatement}</span></h3>;
   } else if (activeUserIsInitiator) {
     return <Editor 
       text={newStatementText} 
-      limit={140} 
+      limit={80} 
       textChanged={textChanged} 
       submitClicked={submitClicked} 
       placeholder="State your position"
-    />
+    />;
   } else {
-    return <h3 className="ghost"><span>Unstated</span></h3>
+    return <h3 className="ghost"><span>Unstated</span></h3>;
   }
 }
 
@@ -72,19 +67,27 @@ const renderResponderStatement = ({
   newStatementText
 }) => {
   if (!!responderStatement) {
-    return <h3><span>{responderStatement}</span></h3>
+    return <h3><span>{responderStatement}</span></h3>;
   } else if (activeUserIsResponder) {
     return <Editor 
       text={newStatementText} 
-      limit={140} 
+      limit={80} 
       textChanged={textChanged} 
       submitClicked={submitClicked} 
-      placeholder="State your position"
-    />
+      placeholder="State your competing position"
+    />;
   } else if (activeUserIsInitiator) {
-    return <h3 className="ghost"><span>Your opponent will state their competing position</span></h3>
+    return <h3 className="ghost"><span>Your opponent will state their competing position</span></h3>;
   } else {
     return <h3 className="ghost"><span>Unstated</span></h3>;
+  }
+}
+
+const renderVS = ({responderStatement, initiatorStatement}) => {
+  if (!!responderStatement && !!initiatorStatement) {
+    return <h4 className="position-statements-vs">vs</h4>;
+  } else {
+    return null;
   }
 }
 
@@ -93,6 +96,7 @@ const PositionStatements = (props) => (
     <div className="position-statement initiator-position-statement">
       { renderInitiatorStatement(props) }
     </div>
+    { renderVS(props) }
     <div className="position-statement responder-position-statement">
       { renderResponderStatement(props) }
     </div>
