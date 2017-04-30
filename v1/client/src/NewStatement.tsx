@@ -3,6 +3,7 @@ import Author from "./Author";
 import EditableStatementContent from "./EditableStatementContent";
 import {rebuttalCharLimit, openingStatementCharLimit} from "./limits";
 import {connect} from "react-redux";
+import {setNewStatementText, submitNewStatement} from "./actions";
 
 const mapStateToProps = (state, {debateID, isRebuttal}) => {
   const currentDebate = state.getIn(["debates", debateID]).toJS();
@@ -19,19 +20,10 @@ const mapStateToProps = (state, {debateID, isRebuttal}) => {
 const mapDispatchToProps = (dispatch, {debateID, isRebuttal}) => {
   return {
     textChanged: (event)=>{
-      dispatch({
-        type: "SET_NEW_STATEMENT_TEXT",
-        payload: {
-          text: event.nativeEvent.target.value,
-          debateID
-        }
-      });
+      dispatch(setNewStatementText(debateID, event.nativeEvent.target.value));
     },
     submitClicked: (event)=>{
-      dispatch({
-        type: "SUBMIT_NEW_STATEMENT",
-        payload: debateID
-      });
+      dispatch(submitNewStatement(debateID));
     }
   }
 }
@@ -66,6 +58,7 @@ const NewStatement = ({
         text={newStatementText}
         textChanged={textChanged}
         submitClicked={submitClicked}
+        placeholder={isRebuttal ? "Write a rebuttal" : "Write an opening statement"}
       />
     </div>
     <h5 className="instruction">
