@@ -7,13 +7,13 @@ const getNextDebateID = (state, debateID) => {
     .concat(state.getIn(["debates", debateID, "rebuttalIDs"]).toJS())
     .concat([0])
   ) + 1;
-}
+};
 
 const getStatementIDsKey = (state, debateID) => {
   return state.getIn(["debates", debateID, "openingStatementIDs"]).toJS().length < 2 
     ? "openingStatementIDs" 
     : "rebuttalIDs";
-}
+};
 
 const getActiveUserRole = (state, debateID) => {
   if (state.getIn(["debates", debateID, "initiatorID"]) === state.get("activeUserID")) {
@@ -26,6 +26,7 @@ const getActiveUserRole = (state, debateID) => {
 };
 
 const initialState = Map({
+  notification: "",
   activeDebateID: 1,
   activeUserID: 1,
   debateIDs: List([1]),
@@ -81,6 +82,7 @@ export default (state=initialState, {type, payload})=>{
     case "SUBMIT_NEW_STATEMENT":
       const statementIDsKey = getStatementIDsKey(state, payload);
       const newStatementID = getNextDebateID(state, payload);
+      const nextAuthorID = state.get("activeUserID") === 1 ? 2 : 1;
       return state
         .setIn(["debates", payload, "newStatementText"], "")
         .setIn(
@@ -98,7 +100,8 @@ export default (state=initialState, {type, payload})=>{
             date: new Date().getTime()
           })
         )
-        .set("activeUserID", state.get("activeUserID") === 1 ? 2 : 1);
+        .set("activeUserID", nextAuthorID)
+        .set("notification", `Automatically switching sides. You are now ${state.getIn(["authors", nextAuthorID, "name"])}`);
     default:
       return state;
   }
