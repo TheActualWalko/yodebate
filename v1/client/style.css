@@ -58,6 +58,33 @@ p, .statement textarea, .annotation h5 {
   background-color: #4965e2;
 }
 
+
+@-webkit-keyframes notify {
+  0% { top: -100px; }
+  10%, 90% { top: 0px; }
+  100% { top: -100px; }
+}
+@keyframes notify {
+  0% { top: -100px; }
+  10%, 90% { top: 0px; }
+  100% { top: -100px; }
+}
+
+.notification {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 15px 0;
+  font-weight: 600;
+  position: absolute;
+  top: -100px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  -webkit-animation: notify 3s;
+  animation: notify 3s;
+}
+
 .debate {
   padding-top: 35px;
 }
@@ -65,13 +92,31 @@ p, .statement textarea, .annotation h5 {
 .position-statements {
   position: relative;
   height:150px;
-  margin-bottom: 70px
+  margin-bottom: 10px
 }
 
 .position-statements .position-statement {
   width: 50%;
   position: absolute;
-  top: 60px;
+}
+
+.position-statements .position-statements-vs {
+  font-family: "PT Serif";
+  font-style: italic;
+  color: #333;
+  background-color: white;
+  text-align: center;
+  font-size: 24px;
+  padding-top: 9px;
+  padding-right: 4px;
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-top: -25px;
+  margin-left: -25px;
 }
 
 .initiator-position-statement {
@@ -101,22 +146,22 @@ p, .statement textarea, .annotation h5 {
 }
 
 .position-statement h3 {
-  padding: 3px 25px 0px 25px; /*padding subtracts width of singlequote*/
+  padding: 0 35px; /*padding subtracts width of singlequote*/
 }
 
 .position-statement h3.ghost {
-  padding: 3px 35px 0px 35px;
+  padding: 0 45px;
 }
 
 .position-statement .editor {
-  padding: 3px 35px 0px 35px;
+  padding: 0 45px;
   position: relative;
 }
 
 .position-statement .editor footer {
   text-align: left;
-  left: 35px;
-  right: 35px;
+  left: 45px;
+  right: 45px;
 }
 
 .position-statement .editor textarea {
@@ -190,21 +235,24 @@ p, .statement textarea, .annotation h5 {
 .statement {
   text-align: center;
   margin-bottom: 50px;
+  height: 200px;
 }
 
 .statement-content-wrap {
-  max-width: 540px;
+  max-width: 610px;
   width: 50%;
-  display:inline-block;
-  position:relative;
+  display: inline-block;
+  position: absolute;
+  padding-right: 35px;
+  padding-left: 35px;
 }
 
 .initiator-statement .statement-content-wrap {
-  right: 305px;
+  right: 50%;
 }
 
 .responder-statement .statement-content-wrap {
-  left: 305px;
+  left: 50%;
 }
 
 .statement * {
@@ -214,10 +262,12 @@ p, .statement textarea, .annotation h5 {
 .new-statement {
   position: relative;
   z-index: 2;
+  min-height: 270px;
 }
 
 .new-statement .statement-content {
   padding-bottom: 11px;
+  position: relative;
 }
 
 .new-statement .statement-content textarea {
@@ -309,25 +359,31 @@ p, .statement textarea, .annotation h5 {
   max-width: 600px;
   width: 50%;
   height: 125px;
-  padding-top: 48px;
   font-size: 24px;
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
   color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.instruction span {
   text-align: center;
+  display:block;
 }
 
 .initiator-statement .instruction {
   left: 50%;
-  margin-left: -80px;
-  padding-left: 130px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .responder-statement .instruction {
   right: 50%;
-  margin-right: -80px;
-  padding-right: 130px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .instruction:after {
@@ -341,12 +397,12 @@ p, .statement textarea, .annotation h5 {
 }
 
 .initiator-statement .instruction:after {
-  left: 124px;
+  left: 44px;
   transform: rotate(45deg);
 }
 
 .responder-statement .instruction:after {
-  right: 124px;
+  right: 44px;
   transform: rotate(225deg);
 }
 
@@ -360,13 +416,122 @@ p, .statement textarea, .annotation h5 {
 }
 
 .initiator-statement .instruction:before {
-  left: 168px;
-  right: 0;
+  left: 88px;
+  right: 35px;
   border-right:10px solid white;
 }
 
 .responder-statement .instruction:before {
-  left: 0;
-  right: 168px;
+  left: 35px;
+  right: 88px;
   border-left:10px solid white;
+}
+
+@media screen and (max-width: 1200px){
+  .position-statements {
+    height: 110px;
+  }
+  .position-statement h3,
+  .position-statement .editor {
+    font-size: 26px;
+    min-height: 110px;
+  }
+  .initiator-statement .instruction span {
+    padding-left: 30px;
+  }
+  .responder-statement .instruction span {
+    padding-right: 30px;
+  }
+}
+
+@media screen and (max-width:800px) {
+  .debate {
+    padding-top: 0;
+  }
+  .author {
+    min-height: 50px;
+  }
+  .author img {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+  }
+  .author h4 {
+    padding-top: 4px;
+    font-size: 18px;
+  }
+  .author h5 {
+    font-size: 14px;
+  }
+  .instruction {
+    display:none;
+  }
+  .initiator-background, .responder-background {
+    display: none;
+  }
+  .statement {
+    padding-top: 20px;
+    padding-bottom: 35px; 
+    margin-bottom: 2px;
+    min-height: 0;
+    height: auto;
+  }
+  .statement .statement-content-wrap {
+    position: static;
+    padding: 0 20px;
+  }
+  .statement .statement-content-wrap {
+    width: 100%;
+  }
+  .initiator-statement {
+    background-color: #eb6302;
+  }
+  .responder-statement {
+    background-color: #4965e2;
+  }
+  .annotation {
+    margin: 5px 0;
+    width: 100%;
+  }
+  .position-statements {
+    height: auto;
+  }
+  .position-statements .position-statement {
+    color: white;
+    position: static;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 2px;
+  }
+  .position-statements .position-statement h3.ghost {
+    display: none;
+  }
+  .position-statements .position-statement h3,
+  .position-statements .position-statement .editor {
+    position: static;
+    font-size: 20px;
+    min-height: 90px;
+    height: auto;
+    box-shadow: none;
+    padding: 35px 20px;
+  }
+  .position-statements .position-statement .editor textarea {
+    min-height: 56px;
+  }
+  .position-statements .position-statement .editor footer {
+    left: 20px;
+    right: 20px;
+  }
+  .position-statements .initiator-position-statement {
+    padding-right: 0
+  }
+  .position-statements .responder-position-statement {
+    padding-left: 0
+  }
+  .position-statements .initiator-position-statement h3:not(.ghost) {
+    background-color: #eb6302;
+  }
+  .position-statements .responder-position-statement h3:not(.ghost) {
+    background-color: #4965e2;
+  }
 }
