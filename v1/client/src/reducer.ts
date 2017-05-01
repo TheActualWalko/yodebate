@@ -3,18 +3,9 @@ import {Map, List, fromJS} from "immutable";
 const getNextStatementID = (state) => {
   return Math.max.apply(
     Math, 
-    state.getIn(["debates", state.get("activeDebateID"), "openingStatementIDs"]).toJS()
-    .concat(state.getIn(["debates", state.get("activeDebateID"), "rebuttalIDs"]).toJS())
-    .concat([0])
+    state.getIn(["debates", state.get("activeDebateID"), "statementIDs"]).toJS().concat([0])
   ) + 1;
 };
-
-const getStatementIDsKey = (state) => {
-  return state.getIn(["debates", state.get("activeDebateID"), "openingStatementIDs"]).toJS().length < 2 
-    ? "openingStatementIDs" 
-    : "rebuttalIDs";
-};
-
 const getActiveAuthorRole = (state) => {
   if (state.getIn(["debates", state.get("activeDebateID"), "initiatorID"]) === state.get("activeAuthorID")) {
     return "initiator";
@@ -57,14 +48,13 @@ export default (state=initialState, {type, payload})=>{
           state.getIn(["debates", state.get("activeDebateID"), "newStatementText"])
         );
     case "SUBMIT_NEW_STATEMENT":
-      const statementIDsKey = getStatementIDsKey(state);
       const newStatementID = getNextStatementID(state);
       return state
         .setIn(["debates", state.get("activeDebateID"), "newStatementText"], "")
         .setIn(
-          ["debates", state.get("activeDebateID"), statementIDsKey],
+          ["debates", state.get("activeDebateID"), "statementIDs"],
           state
-            .getIn(["debates", state.get("activeDebateID"), statementIDsKey])
+            .getIn(["debates", state.get("activeDebateID"), "statementIDs"])
             .push(newStatementID)
         )
         .setIn(

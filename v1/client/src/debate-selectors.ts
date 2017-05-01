@@ -27,21 +27,11 @@ export const getPositionStatements = makeDebateGetter("positionStatements", Map(
   initiator: "",
   responder: ""
 }));
-export const getOpeningStatementIDs = makeDebateGetter("openingStatementIDs", List());
-export const getRebuttalIDs = makeDebateGetter("rebuttalIDs", List());
+export const getStatementIDs = makeDebateGetter("statementIDs", List());
 
 export const getHaveAllOpeningStatements = createSelector(
-  getOpeningStatementIDs,
-  openingStatementIDs => openingStatementIDs.size === 2
-);
-
-export const getAllStatementIDs = createSelector(
-  [
-    getOpeningStatementIDs,
-    getRebuttalIDs
-  ],
-  (openingStatementIDs, rebuttalIDs) => 
-    openingStatementIDs.concat(rebuttalIDs)
+  getStatementIDs,
+  statementIDs => statementIDs.size >= 2
 );
 
 export const getInitiatorPositionStatement = createSelector(
@@ -53,7 +43,6 @@ export const getResponderPositionStatement = createSelector(
   getPositionStatements,
   statements => statements.get('responder')
 );
-
 
 export const getActiveAuthorIsInitiator = createSelector(
   [getActiveAuthorID, getInitiatorID],
@@ -86,7 +75,7 @@ export const getNeedPositionStatement = createSelector(
 export const getIsActiveAuthorTurn = createSelector(
   [
     getIsOver, 
-    getAllStatementIDs,
+    getStatementIDs,
     getActiveAuthorIsInitiator,
     getActiveAuthorIsResponder
   ],
@@ -105,7 +94,7 @@ export const getIsActiveAuthorTurn = createSelector(
 
 export const getNeedOpeningStatement = createSelector(
   [
-    getOpeningStatementIDs,
+    getStatementIDs,
     getActiveAuthorIsInitiator,
     getActiveAuthorIsResponder
   ],

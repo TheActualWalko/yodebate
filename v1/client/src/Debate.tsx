@@ -16,8 +16,7 @@ import {
   getNeedPositionStatement, 
   getNeedOpeningStatement,
   getHaveAllOpeningStatements,
-  getOpeningStatementIDs,
-  getRebuttalIDs
+  getStatementIDs
 } from "./debate-selectors"
 
 const mapStateToProps = createStructuredSelector({
@@ -26,8 +25,7 @@ const mapStateToProps = createStructuredSelector({
   needPositionStatement: getNeedPositionStatement,
   needOpeningStatement: getNeedOpeningStatement,
   haveAllOpeningStatements: getHaveAllOpeningStatements,
-  openingStatementIDs: getOpeningStatementIDs,
-  rebuttalIDs: getRebuttalIDs
+  statementIDs: getStatementIDs
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -43,24 +41,28 @@ const renderOpeningStatementsAnnotation = ({needPositionStatement})=>{
     && <Annotation title="Opening Statements" subtitle="500 characters each" />;
 }
 
-const renderOpeningStatements = ({needPositionStatement, needOpeningStatement, id, openingStatementIDs})=>{
+const renderOpeningStatements = ({needPositionStatement, needOpeningStatement, id, statementIDs})=>{
   if (needPositionStatement) {
     return null;
   } else if (needOpeningStatement) {
     return <NewStatement isRebuttal={false} /> 
   } else { 
-    return openingStatementIDs.map(statementID => <Statement statementID={statementID} key={statementID} />);
+    return statementIDs
+      .slice(0,2)
+      .map(statementID => <Statement statementID={statementID} key={statementID} />);
   }
 }
 
-const renderRebuttalsAnnotation = ({haveAllOpeningStatements})=>{
-  return haveAllOpeningStatements
+const renderRebuttalsAnnotation = ({statementIDs, isMyTurn})=>{
+  return statementIDs.size >= 3 || (statementIDs.size === 2 && isMyTurn)
     && <Annotation title="Rebuttals" subtitle="250 characters each" />;
 }
 
-const renderRebuttals = ({haveAllOpeningStatements, rebuttalIDs, id})=>{
+const renderRebuttals = ({haveAllOpeningStatements, statementIDs, id})=>{
   return haveAllOpeningStatements
-    && rebuttalIDs.map(statementID => <Statement statementID={statementID} key={statementID} />) 
+    && statementIDs
+      .slice(2)
+      .map(statementID => <Statement statementID={statementID} key={statementID} />) 
 }
 
 const renderNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, isMyTurn, id})=>{
