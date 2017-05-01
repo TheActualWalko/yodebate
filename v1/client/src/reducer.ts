@@ -1,24 +1,24 @@
 import {Map, List, fromJS} from "immutable";
 
-const getNextDebateID = (state, debateID) => {
+const getNextStatementID = (state) => {
   return Math.max.apply(
     Math, 
-    state.getIn(["debates", debateID, "openingStatementIDs"]).toJS()
-    .concat(state.getIn(["debates", debateID, "rebuttalIDs"]).toJS())
+    state.getIn(["debates", state.get("activeDebateID"), "openingStatementIDs"]).toJS()
+    .concat(state.getIn(["debates", state.get("activeDebateID"), "rebuttalIDs"]).toJS())
     .concat([0])
   ) + 1;
 };
 
-const getStatementIDsKey = (state, debateID) => {
-  return state.getIn(["debates", debateID, "openingStatementIDs"]).toJS().length < 2 
+const getStatementIDsKey = (state) => {
+  return state.getIn(["debates", state.get("activeDebateID"), "openingStatementIDs"]).toJS().length < 2 
     ? "openingStatementIDs" 
     : "rebuttalIDs";
 };
 
-const getActiveUserRole = (state, debateID) => {
-  if (state.getIn(["debates", debateID, "initiatorID"]) === state.get("activeUserID")) {
+const getActiveAuthorRole = (state) => {
+  if (state.getIn(["debates", state.get("activeDebateID"), "initiatorID"]) === state.get("activeAuthorID")) {
     return "initiator";
-  } else if (state.getIn(["debates", debateID, "responderID"]) === state.get("activeUserID")) {
+  } else if (state.getIn(["debates", state.get("activeDebateID"), "responderID"]) === state.get("activeAuthorID")) {
     return "responder";
   } else {
     return null;
@@ -27,81 +27,67 @@ const getActiveUserRole = (state, debateID) => {
 
 const initialState = Map({
   notification: "",
-  activeDebateID: 1,
-  activeUserID: 1,
-  debateIDs: List([1]),
-  debates: Map([[
-    1, Map({
-      initiatorID: 1,
-      responderID: 2,
-      positionStatements: Map({
-        initiator: null,
-        responder: null
-      }),
-      openingStatementIDs: List(),
-      rebuttalIDs: List(),
-      isOver: false,
-      newStatementText: ""
-    })
-  ]]),
+  activeDebateID: "test",
+  activeAuthorID: "catman",
+  debates: Map(),
   statements: Map(),
-  authors: Map([
-    [1, Map({
-      imageURL: "http://www.rd.com/wp-content/uploads/sites/2/2016/04/01-cat-wants-to-tell-you-laptop.jpg",
-      name: "Catman",
-      description: "Rocket Scientist"
-    })],
-    [2, Map({
-      imageURL: "https://images-na.ssl-images-amazon.com/images/G/01/img15/pet-products/small-tiles/23695_pets_vertical_store_dogs_small_tile_8._CB312176604_.jpg",
-      name: "Dogwoman",
-      description: "Particle Physicist"
-    })]
-  ])
+  authors: Map()
 });
 
 export default (state=initialState, {type, payload})=>{
   let toReturn;
   switch (type) {
+    case "SET_ACTIVE_AUTHOR_ID":
+      return state.set("activeAuthorID", payload);
     case "SET_NEW_STATEMENT_TEXT":
       return state.setIn(
         [
           "debates", 
-          payload.debateID, 
+          state.get("activeDebateID"),
           "newStatementText"
         ], 
-        payload.text
+        payload
       );
     case "SUBMIT_POSITION_STATEMENT":
-    const activeUserRole = getActiveUserRole(state, payload);
+    const activeAuthorRole = getActiveAuthorRole(state);
       return state
-        .setIn(["debates", payload, "newStatementText"], "")
+        .setIn(["debates", state.get("activeDebateID"), "newStatementText"], "")
         .setIn(
-          ["debates", payload, "positionStatements", activeUserRole],
-          state.getIn(["debates", payload, "newStatementText"])
+          ["debates", state.get("activeDebateID"), "positionStatements", activeAuthorRole],
+          state.getIn(["debates", state.get("activeDebateID"), "newStatementText"])
         );
     case "SUBMIT_NEW_STATEMENT":
-      const statementIDsKey = getStatementIDsKey(state, payload);
-      const newStatementID = getNextDebateID(state, payload);
-      const nextAuthorID = state.get("activeUserID") === 1 ? 2 : 1;
+      const statementIDsKey = getStatementIDsKey(state);
+      const newStatementID = getNextStatementID(state);
       return state
-        .setIn(["debates", payload, "newStatementText"], "")
+        .setIn(["debates", state.get("activeDebateID"), "newStatementText"], "")
         .setIn(
-          ["debates", payload, statementIDsKey],
+          ["debates", state.get("activeDebateID"), statementIDsKey],
           state
-            .getIn(["debates", payload, statementIDsKey])
+            .getIn(["debates", state.get("activeDebateID"), statementIDsKey])
             .push(newStatementID)
         )
         .setIn(
           ["statements", newStatementID], 
           Map({
-            debateID: payload,
-            authorID: state.get("activeUserID"),
-            text: state.getIn(["debates", payload, "newStatementText"]),
+            debateID: state.get("activeDebateID"),
+            authorID: state.get("activeAuthorID"),
+            text: state.getIn(["debates", state.get("activeDebateID"), "newStatementText"]),
             date: new Date().getTime()
           })
+        );
+    case "RECEIVE_AUTHOR":
+      const {authorID, author} = payload;
+      return state.setIn(["authors", authorID], fromJS(author));
+    case "RECEIVE_DEBATE":
+      const {debateID, debate, authors, statements} = payload;
+      return state
+        .setIn(
+          ["debates", debateID],
+          fromJS(debate).set("newStatementText", "")
         )
-        .set("activeUserID", nextAuthorID)
-        .set("notification", `Automatically switching sides. You are now ${state.getIn(["authors", nextAuthorID, "name"])}`);
+        .merge(fromJS({ authors }))
+        .merge(fromJS({ statements }));
     default:
       return state;
   }

@@ -2,24 +2,47 @@ const app  = require("express")();
 const http = require("http").Server(app);
 const io   = require("socket.io")(http);
 
+const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+const charsLength = chars.length;
+
+const randomID = ()=>{
+  let output = "";
+  for(let i = 0; i < 10; i++){
+    output += chars[Math.floor(Math.random() * charsLength)];
+  }
+  return output;
+}
+
 const authors = {
-  catman: {
-    imageURL: "http://www.rd.com/wp-content/uploads/sites/2/2016/04/01-cat-wants-to-tell-you-laptop.jpg",
-    name: "Catman",
-    description: "Rocket Scientist"
+  sam: {
+    imageURL: "sam.png",
+    name: "Sam Watkinson",
+    description: "Morality Engineer"
   },
-  dogwoman: {
-    imageURL: "https://images-na.ssl-images-amazon.com/images/G/01/img15/pet-products/small-tiles/23695_pets_vertical_store_dogs_small_tile_8._CB312176604_.jpg",
-    name: "Dogwoman",
-    description: "Particle Physicist"
+  marc: {
+    imageURL: "marc.png",
+    name: "Marc Burns",
+    description: "Hedge Fund Roboticist"
   }
 }
 
-const debates = {};
+const debates = {
+  test: {
+    initiatorID: "sam",
+    responderID: "marc",
+    positionStatements: {
+      initiator: null,
+      responder: null
+    },
+    openingStatementIDs: [],
+    rebuttalIDs: [],
+    isOver: false
+  }
+};
 const statements = {};
 
 const getPosition = (debateID, activeAuthorID) => {
-  if (debates[debateID].intiatorID === activeAuthorID) {
+  if (debates[debateID].initiatorID === activeAuthorID) {
     return "initiator";
   } else if (debates[debateID].responderID === activeAuthorID) {
     return "responder";
@@ -40,27 +63,37 @@ const getIsMyTurn = (debateID, activeAuthorID) => {
 
 io.on("connection", (socket)=>{
   let activeAuthorID;
-  socket.on("login", (authorID, callback)=>{
+  socket.on("authenticate", (authorID)=>{
     if (!activeAuthorID) {
       activeAuthorID = authorID;
     } 
-    callback(authors[activeAuthorID]);
   });
-  socket.on("getDebate", (id, callback)=>{
-    callback(debates[id]);
+  socket.on("getDebate", (debateID, callback)=>{
+    const debate = debates[debateID];
+    const debateStatements = {};
+    debate.openingStatementIDs.forEach( id => debateStatements[id] = statements[id] );
+    debate.rebuttalIDs.forEach( id => debateStatements[id] = statements[id] );
+    callback(
+      debate, 
+      {
+        [debate.initiatorID]: authors[debate.initiatorID],
+        [debate.responderID]: authors[debate.responderID]
+      },
+      debateStatements
+    );
   });
-  socket.on("getAuthor", (id, callback)=>{
-    callback(authors[id]);
+  socket.on("getAuthor", (authorID, callback)=>{
+    callback(authors[authorID]);
   });
   socket.on("joinDebate", (debateID, callback)=>{
-    if (!debates[id].responderID) {
-      debates[id].responderID = activeAuthorID;
+    if (!debates[debateID].responderID) {
+      debates[debateID].responderID = activeAuthorID;
     }
-    callback(debates[id]);
+    callback(debates[debateID]);
   });
   socket.on("startDebate", (callback)=>{
-    const id = randomID();
-    debates[id] = {
+    const debateID = randomID();
+    debates[debateID] = {
       initiatorID: activeAuthorID,
       responderID: null,
       positionStatements: {
@@ -71,32 +104,35 @@ io.on("connection", (socket)=>{
       rebuttalIDs: [],
       isOver: false
     }
-    callback(id);
+    callback(debateID);
   });
   socket.on("setPositionStatement", (debateID, statementText, callback)=>{
     const position = getPosition(debateID, activeAuthorID);
+    console.log(position, debateID, activeAuthorID);
     if (position) {
       debates[debateID].positionStatements[position] = statementText;
+      console.log(debates[debateID]);
     }
     callback();
   });
-  socket.on("addStatement", (debateID, statementText)=>{
+  socket.on("addStatement", (debateID, statementText, callback)=>{
+    let statementID;
     if (getIsMyTurn(debateID, activeAuthorID)) {
-      const id = randomID();
-      statements[id] = {
+      statementID = randomID();
+      statements[statementID] = {
         debateID,
         authorID: activeAuthorID,
         text: statementText,
         date: new Date().getTime()
       };
       if (debates[debateID].openingStatementIDs.length < 2){
-        debates[debateID].openingStatementIDs.push();
+        debates[debateID].openingStatementIDs.push(statementID);
       } else {
-        debates[debateID].rebuttalIDs.push();
+        debates[debateID].rebuttalIDs.push(statementID);
       }
+      console.log(debates[debateID]);
     };
-    
-    callback(id, statements[id]);
+    callback(statementID, statements[statementID]);
   });
 });
 
