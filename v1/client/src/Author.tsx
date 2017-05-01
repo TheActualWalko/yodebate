@@ -1,21 +1,13 @@
 import React = require("react");
 import {connect} from "react-redux";
+import {createStructuredSelector} from "reselect";
+import {getName, getDescription, getImageURL} from './author-selectors';
 
-const mapStateToProps = (state, {id})=>{
-  if (!state.getIn(["authors", id])) {
-    return {
-      imageURL: "",
-      name: "",
-      description: "loading..."
-    };
-  }
-
-  return {
-    imageURL: state.getIn(["authors", id, "imageURL"]),
-    name: state.getIn(["authors", id, "name"]),
-    description: state.getIn(["authors", id, "description"]),
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  name: getName,
+  description: getDescription,
+  imageURL: getImageURL
+});
 
 const Author = ({imageURL, name, description})=>(
   <div className="author">

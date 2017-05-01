@@ -12,7 +12,7 @@ export default class App extends React.Component<{},{}>{
           <div className="initiator-background"></div>
           <div className="responder-background"></div>
           <Notification />
-          <Debate id={1} />
+          <Debate />
         </div>
       </Provider>
     );

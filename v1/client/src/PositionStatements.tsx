@@ -6,46 +6,43 @@ import {createStructuredSelector} from "reselect";
 import {
   getInitiatorPositionStatement, 
   getResponderPositionStatement,
-  getActiveUserIsInitiator,
-  getActiveUserIsResponder,
+  getActiveAuthorIsInitiator,
+  getActiveAuthorIsResponder,
   getNewStatementText
-} from './selectors';
+} from './debate-selectors';
 import {setNewStatementText, submitPositionStatement} from "./actions";
 
 
-const mapStateToProps = (state, {debateID}) => createStructuredSelector({
-  initiatorStatement: getInitiatorPositionStatement(debateID),
-  responderStatement: getResponderPositionStatement(debateID),
-  activeUserIsInitiator: getActiveUserIsInitiator(debateID),
-  activeUserIsResponder: getActiveUserIsResponder(debateID),
-  newStatementText: getNewStatementText(debateID)
-})(state);
+const mapStateToProps = createStructuredSelector({
+  initiatorStatement: getInitiatorPositionStatement,
+  responderStatement: getResponderPositionStatement,
+  activeAuthorIsInitiator: getActiveAuthorIsInitiator,
+  activeAuthorIsResponder: getActiveAuthorIsResponder,
+  newStatementText: getNewStatementText
+});
 
-const mapDispatchToProps = (dispatch, {debateID, isRebuttal}) => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    textChanged: (event)=>{
-      dispatch(setNewStatementText(
-        debateID, 
-        event.nativeEvent.target.value.replace(/[\r\n\v]+/g, '')
-      ));
+    textChanged: (text)=>{
+      dispatch(setNewStatementText(text.replace(/[\r\n\v]+/g, '')));
     },
     submitClicked: (event)=>{
-      dispatch(submitPositionStatement(debateID));
+      dispatch(submitPositionStatement());
     }
   }
 }
 
 const renderInitiatorStatement = ({
   initiatorStatement, 
-  activeUserIsResponder, 
-  activeUserIsInitiator,
+  activeAuthorIsResponder, 
+  activeAuthorIsInitiator,
   textChanged,
   submitClicked,
   newStatementText
 }) => {
   if (!!initiatorStatement) {
     return <h3><span>{initiatorStatement}</span></h3>;
-  } else if (activeUserIsInitiator) {
+  } else if (activeAuthorIsInitiator) {
     return <Editor 
       text={newStatementText} 
       limit={80} 
@@ -60,15 +57,15 @@ const renderInitiatorStatement = ({
 
 const renderResponderStatement = ({
   responderStatement, 
-  activeUserIsResponder, 
-  activeUserIsInitiator,
+  activeAuthorIsResponder, 
+  activeAuthorIsInitiator,
   textChanged,
   submitClicked,
   newStatementText
 }) => {
   if (!!responderStatement) {
     return <h3><span>{responderStatement}</span></h3>;
-  } else if (activeUserIsResponder) {
+  } else if (activeAuthorIsResponder) {
     return <Editor 
       text={newStatementText} 
       limit={80} 
@@ -76,7 +73,7 @@ const renderResponderStatement = ({
       submitClicked={submitClicked} 
       placeholder="State your competing position"
     />;
-  } else if (activeUserIsInitiator) {
+  } else if (activeAuthorIsInitiator) {
     return <h3 className="ghost"><span>Your opponent will state their competing position</span></h3>;
   } else {
     return <h3 className="ghost"><span>Unstated</span></h3>;

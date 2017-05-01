@@ -4,26 +4,26 @@ import EditableStatementContent from "./EditableStatementContent";
 import {rebuttalCharLimit, openingStatementCharLimit} from "./limits";
 import {connect} from "react-redux";
 import {setNewStatementText, submitNewStatement} from "./actions";
+import { getActiveAuthorID } from './author-selectors.ts';
+import {
+  getActiveAuthorIsInitiator,
+  getNewStatementText
+} from "./debate-selectors";
+import {createStructuredSelector} from "reselect";
 
-const mapStateToProps = (state, {debateID, isRebuttal}) => {
-  const currentDebate = state.getIn(["debates", debateID]).toJS();
-  const { rebuttalIDs, openingStatementIDs, newStatementText } = currentDebate;
-  const allStatementIDs = [...openingStatementIDs, ...rebuttalIDs];
-  return {
-    authorID: state.get("activeUserID"),
-    isInitiatorStatement: (allStatementIDs.length % 2 === 0),
-    newStatementText,
-    isRebuttal
-  };
-};
+const mapStateToProps = createStructuredSelector({
+  authorID: getActiveAuthorID,
+  isInitiatorStatement: getActiveAuthorIsInitiator,
+  newStatementText: getNewStatementText
+});
 
-const mapDispatchToProps = (dispatch, {debateID, isRebuttal}) => {
+const mapDispatchToProps = (dispatch, {isRebuttal}) => {
   return {
-    textChanged: (event)=>{
-      dispatch(setNewStatementText(debateID, event.nativeEvent.target.value));
+    textChanged: (text)=>{
+      dispatch(setNewStatementText(text));
     },
     submitClicked: (event)=>{
-      dispatch(submitNewStatement(debateID));
+      dispatch(submitNewStatement());
     }
   }
 }
@@ -48,7 +48,7 @@ const NewStatement = ({
     `} 
   >
     <div className="statement-content-wrap">
-      <Author id={authorID} />
+      <Author authorID={authorID} />
       <EditableStatementContent 
         limit={
           isRebuttal 

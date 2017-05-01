@@ -3,28 +3,26 @@ import StatementContent from "./StatementContent";
 import Author from "./Author";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {getAuthorID, getIsInitiatorStatement} from "./selectors";
+import {getAuthorID, getIsInitiatorStatement, getIsResponderStatement} from "./statement-selectors";
 
-const mapStateToProps = (state, {id, debateID}) => createStructuredSelector({
-  authorID: getAuthorID(id),
-  isInitiatorStatement: getIsInitiatorStatement(id)
-})(state);
+const mapStateToProps = createStructuredSelector({
+  authorID: getAuthorID,
+  isInitiatorStatement: getIsInitiatorStatement,
+  isResponderStatement: getIsResponderStatement
+});
 
-const Statement = ({id, debateID, authorID, isInitiatorStatement}) => (
+const Statement = ({statementID, authorID, isInitiatorStatement, isResponderStatement}) => (
   <article 
     className={`
       statement 
-      ${
-        isInitiatorStatement 
-          ? "initiator-statement" 
-          : "responder-statement"
-      }
+      ${ isInitiatorStatement && "initiator-statement" }
+      ${ isResponderStatement && "responder-statement" }
     `} 
-    id={id}
+    id={statementID}
   >
     <div className="statement-content-wrap">
-      <Author id={authorID} />
-      <StatementContent id={id} debateID={debateID} />
+      <Author authorID={authorID} />
+      <StatementContent statementID={statementID} />
     </div>
   </article>
 );
