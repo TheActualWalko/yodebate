@@ -6,7 +6,7 @@ export default ({ text, limit, textChanged, submitClicked, placeholder="Write so
       autoFocus 
       onChange={event=>textChanged(event.nativeEvent.target.value.slice(0,limit))} 
       value={text} 
-      rows={Math.ceil(text.length/62.5) || 1} 
+      rows={Math.ceil(text.length/37.5) || 1} 
       placeholder={placeholder} 
     ></textarea>
     <footer>
