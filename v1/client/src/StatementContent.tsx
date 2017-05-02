@@ -23,4 +23,4 @@ const StatementContent = ({statementID, text, date, permalink})=>(
   </div>
 );
 
-export default connect(mapStateToProps)(StatementContent);
+export default connect(mapStateToProps)(StatementContent) as React.ComponentClass<{statementID: any}>;

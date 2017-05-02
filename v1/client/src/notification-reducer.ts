@@ -1,0 +1,1 @@
+export default (state="", {type, payload})=>((type === "SET_NOTIFICATION") ? payload : state);

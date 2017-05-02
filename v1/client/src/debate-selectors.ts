@@ -1,6 +1,6 @@
-import {Map, List} from 'immutable';
+import {Map, List} from "immutable";
 import {createSelector} from "reselect";
-import {getActiveAuthorID} from './author-selectors';
+import {getActiveAuthorID} from "./author-selectors";
 
 export const getDebates = state => state.get("debates", Map());
 export const getActiveDebateID = state => state.get("activeDebateID", null);

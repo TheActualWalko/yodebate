@@ -1,4 +1,4 @@
-import {Map} from 'immutable';
+import {Map} from "immutable";
 import {createSelector} from "reselect";
 
 export const getActiveAuthorID = state => state.get("activeAuthorID", null);

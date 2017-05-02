@@ -4,7 +4,7 @@ export default ({ text, limit, textChanged, submitClicked, placeholder="Write so
   <div className="editor">
     <textarea 
       autoFocus 
-      onChange={event=>textChanged(event.nativeEvent.target.value.slice(0,limit))} 
+      onChange={event=>textChanged(event.nativeEvent.target["value"].slice(0,limit))} 
       value={text} 
       rows={Math.ceil(text.length/37.5) || 1} 
       placeholder={placeholder} 

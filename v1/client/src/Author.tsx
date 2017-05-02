@@ -1,7 +1,7 @@
 import React = require("react");
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {getName, getDescription, getImageURL} from './author-selectors';
+import {getName, getDescription, getImageURL} from "./author-selectors";
 
 const mapStateToProps = createStructuredSelector({
   name: getName,
@@ -17,4 +17,4 @@ const Author = ({imageURL, name, description})=>(
   </div>
 );
 
-export default connect(mapStateToProps)(Author);
+export default connect(mapStateToProps)(Author) as React.ComponentClass<{authorID: any}>;

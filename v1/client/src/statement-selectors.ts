@@ -1,6 +1,6 @@
-import {Map} from 'immutable';
+import {Map} from "immutable";
 import {createSelector} from "reselect";
-import {getDebates, getActiveDebateID, getInitiatorID, getResponderID} from './debate-selectors.ts';
+import {getDebates, getActiveDebateID, getInitiatorID, getResponderID} from "./debate-selectors.ts";
 
 export const getStatements = state => state.get("statements", Map());
 export const getStatement = (state, {statementID}) => state.getIn(["statements", statementID], Map());

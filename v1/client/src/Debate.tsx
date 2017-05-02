@@ -7,7 +7,7 @@ import {rebuttalCharLimit, openingStatementCharLimit} from "./limits";
 import {connect} from "react-redux";
 import {List} from "immutable";
 import {createStructuredSelector} from "reselect";
-import {getActiveDebate} from "./actions";
+import {getActiveDebate} from "./debate-actions";
 import {
   getIsLoaded,
   getInitiatorPositionStatement,

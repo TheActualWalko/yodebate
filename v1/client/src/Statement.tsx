@@ -1,8 +1,8 @@
 import React = require("react");
-import StatementContent from "./StatementContent";
-import Author from "./Author";
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
+import StatementContent from "./StatementContent";
+import Author from "./Author";
 import {getAuthorID, getIsInitiatorStatement, getIsResponderStatement} from "./statement-selectors";
 
 const mapStateToProps = createStructuredSelector({
@@ -27,4 +27,4 @@ const Statement = ({statementID, authorID, isInitiatorStatement, isResponderStat
   </article>
 );
 
-export default connect(mapStateToProps)(Statement);
+export default connect(mapStateToProps)(Statement) as React.ComponentClass<{statementID: any}>;

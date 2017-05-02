@@ -3,12 +3,9 @@ import Author from "./Author";
 import EditableStatementContent from "./EditableStatementContent";
 import {rebuttalCharLimit, openingStatementCharLimit} from "./limits";
 import {connect} from "react-redux";
-import {setNewStatementText, submitNewStatement} from "./actions";
-import { getActiveAuthorID } from './author-selectors.ts';
-import {
-  getActiveAuthorIsInitiator,
-  getNewStatementText
-} from "./debate-selectors";
+import {setNewStatementText, submitNewStatement} from "./debate-actions";
+import {getActiveAuthorID} from "./author-selectors.ts";
+import {getActiveAuthorIsInitiator, getNewStatementText} from "./debate-selectors";
 import {createStructuredSelector} from "reselect";
 
 const mapStateToProps = createStructuredSelector({

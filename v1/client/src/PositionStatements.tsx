@@ -9,8 +9,8 @@ import {
   getActiveAuthorIsInitiator,
   getActiveAuthorIsResponder,
   getNewStatementText
-} from './debate-selectors';
-import {setNewStatementText, submitPositionStatement} from "./actions";
+} from "./debate-selectors";
+import {setNewStatementText, submitPositionStatement} from "./debate-actions";
 
 
 const mapStateToProps = createStructuredSelector({
@@ -82,7 +82,7 @@ const renderResponderStatement = ({
 
 const renderVS = ({responderStatement, initiatorStatement}) => {
   if (!!responderStatement && !!initiatorStatement) {
-    return <h4 className="position-statements-vs">vs</h4>;
+    return <h4 className="position-statement-vs">vs</h4>;
   } else {
     return null;
   }
