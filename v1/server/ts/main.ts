@@ -31,8 +31,8 @@ const debates = {
     initiatorID: "sam",
     responderID: "marc",
     positionStatements: {
-      initiator: null,
-      responder: null
+      initiator: "Initiator",
+      responder: "Responder"
     },
     statementIDs: [],
     isOver: false
@@ -61,42 +61,44 @@ const getIsMyTurn = (debateID, activeAuthorID) => {
 }
 
 io.on("connection", (socket)=>{
+
+  const register = (endpoint, handler)=>{
+    socket.on(endpoint, (payload, callback)=>{
+      console.log(activeAuthorID, "called", endpoint, JSON.stringify(payload).slice(0,50));
+      const reject = error => callback(error);
+      const resolve = response => callback(null, response);
+      handler(payload, resolve, reject);
+    });
+  }
+
   let activeAuthorID;
-  socket.on("authenticate", (authorID)=>{
-    console.log(activeAuthorID, "called", "authenticate");
-    if (!activeAuthorID) {
-      activeAuthorID = authorID;
-    } 
+  register("authenticate", ({ authorID }, resolve)=>{
+    activeAuthorID = authorID;
+    resolve(authors[authorID]);
   });
-  socket.on("getDebate", (debateID, callback)=>{
-    console.log(activeAuthorID, "called", "getDebate");
+  register("getDebate", ({ debateID }, resolve, reject)=>{
     const debate = debates[debateID];
-    const debateStatements = {};
-    debate.statementIDs.forEach( id => debateStatements[id] = statements[id] );
-    callback(
-      debate, 
-      {
-        [debate.initiatorID]: authors[debate.initiatorID],
-        [debate.responderID]: authors[debate.responderID]
-      },
-      debateStatements
-    );
+    debate ? resolve(debate) : reject("No debate found with id " + debateID);
   });
-  socket.on("getAuthor", (authorID, callback)=>{
-    console.log(activeAuthorID, "called", "getAuthor");
-    callback(authors[authorID]);
+  register("getStatement", ({ statementID }, resolve, reject)=>{
+    const statement = statements[statementID];
+    statement ? resolve(statement) : reject("No statement found with id " + statementID);
   });
-  socket.on("joinDebate", (debateID, callback)=>{
-    console.log(activeAuthorID, "called", "joinDebate");
+  register("getAuthor", ({ authorID }, resolve, reject)=>{
+    const author = authors[authorID];
+    author ? resolve(author) : reject("No author found with id " + authorID);
+  });
+  register("joinDebate", ({ debateID }, resolve, reject)=>{
     if (!debates[debateID].responderID) {
       debates[debateID].responderID = activeAuthorID;
+      resolve(debates[debateID]);
+    } else {
+      reject("This debate is full!");
     }
-    callback(debates[debateID]);
   });
-  socket.on("startDebate", (callback)=>{
-    console.log(activeAuthorID, "called", "startDebate");
+  register("startDebate", ({}, resolve, reject)=>{
     const debateID = randomID();
-    debates[debateID] = {
+    const debate = {
       initiatorID: activeAuthorID,
       responderID: null,
       positionStatements: {
@@ -105,31 +107,35 @@ io.on("connection", (socket)=>{
       },
       statementIDs: [],
       isOver: false
-    }
-    callback(debateID);
+    };
+    debates[debateID] = debate;
+    resolve({debate, debateID});
   });
-  socket.on("setPositionStatement", (debateID, statementText, callback)=>{
-    console.log(activeAuthorID, "called", "setPositionStatement");
+  register("setPositionStatement", ({ debateID, text }, resolve, reject)=>{
     const position = getPosition(debateID, activeAuthorID);
     if (position) {
-      debates[debateID].positionStatements[position] = statementText;
+      debates[debateID].positionStatements[position] = text;
+      resolve(debates[debateID]);
+    } else {
+      reject("You're not allowed to set a position statement now!");
     }
-    callback();
   });
-  socket.on("addStatement", (debateID, statementText, callback)=>{
-    console.log(activeAuthorID, "called", "addStatement");
-    let statementID;
+  register("addStatement", ({ debateID, text }, resolve, reject)=>{
     if (getIsMyTurn(debateID, activeAuthorID)) {
-      statementID = randomID();
-      statements[statementID] = {
+      const statementID = randomID();
+      const statement = {
         debateID,
+        text,
         authorID: activeAuthorID,
-        text: statementText,
         date: new Date().getTime()
       };
-      debates[debateID].statementIDs.push(statementID);
-    };
-    callback(statementID, statements[statementID]);
+      statements[statementID] = statement;
+      const debate = debates[debateID];
+      debate.statementIDs.push(statementID);
+      resolve({statementID, statement, debate});
+    } else {
+      reject("It's not your turn!");
+    }
   });
 });
 

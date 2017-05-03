@@ -24,7 +24,7 @@ export const getAuthor = (authorID) => {
 
 export const setActiveAuthorID = (authorID) => {
   return (dispatch, getState) => {
-    api("authenticate", authorID)
+    api("authenticate", { authorID })
       .then((author)=>{
         dispatch({ 
           type: "SET_ACTIVE_AUTHOR_ID", 

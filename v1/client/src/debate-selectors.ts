@@ -3,10 +3,14 @@ import {createSelector} from "reselect";
 import {getActiveAuthorID} from "./author-selectors";
 
 export const getDebates = state => state.get("debates", Map());
-export const getActiveDebateID = state => state.get("activeDebateID", null);
+export const getActiveDebateID = createSelector(
+  getDebates,
+  debates => debates.get("activeDebateID", null)
+);
+
 export const getActiveDebate = createSelector(
   [getDebates, getActiveDebateID],
-  (debates, debateID) => debates.get(debateID, null)
+  (debates, debateID) => debates.getIn(["byID", debateID], null)
 );
 
 const makeDebateGetter = (key, def = null) => createSelector(
@@ -14,20 +18,18 @@ const makeDebateGetter = (key, def = null) => createSelector(
   debate => debate ? debate.get(key, def) : def
 );
 
-export const getIsLoaded = createSelector(
-  getActiveDebate,
-  debate => !!debate
-);
-
 export const getIsOver = makeDebateGetter("isOver", false);
 export const getInitiatorID = makeDebateGetter("initiatorID", null);
 export const getResponderID = makeDebateGetter("responderID", null);
-export const getNewStatementText = makeDebateGetter("newStatementText", null);
+export const getNewStatementText = makeDebateGetter("newStatementText", "");
 export const getPositionStatements = makeDebateGetter("positionStatements", Map({
   initiator: "",
   responder: ""
 }));
 export const getStatementIDs = makeDebateGetter("statementIDs", List());
+export const getIsLoading = makeDebateGetter("isLoading", false);
+export const getIsLoaded = makeDebateGetter("isLoaded", false);
+export const getError = makeDebateGetter("error", null);
 
 export const getHaveAllOpeningStatements = createSelector(
   getStatementIDs,

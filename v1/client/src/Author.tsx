@@ -1,12 +1,28 @@
 import React = require("react");
 import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
-import {getName, getDescription, getImageURL} from "./author-selectors";
+import {
+  getName, 
+  getDescription, 
+  getImageURL,
+  getIsLoaded,
+  getIsLoading,
+  getError
+} from "./author-selectors";
+import {getAuthor} from "./author-actions";
+import loader from "./loader";
 
 const mapStateToProps = createStructuredSelector({
   name: getName,
   description: getDescription,
-  imageURL: getImageURL
+  imageURL: getImageURL,
+  isLoaded: getIsLoaded,
+  isLoading: getIsLoading,
+  error: getError
+});
+
+const mapDispatchToProps = (dispatch, {authorID}) => ({
+  load: ()=>dispatch(getAuthor(authorID))
 });
 
 const Author = ({imageURL, name, description})=>(
@@ -17,4 +33,4 @@ const Author = ({imageURL, name, description})=>(
   </div>
 );
 
-export default connect(mapStateToProps)(Author) as React.ComponentClass<{authorID: any}>;
+export default connect(mapStateToProps, mapDispatchToProps)(loader(Author)) as React.ComponentClass<{authorID: any}>;

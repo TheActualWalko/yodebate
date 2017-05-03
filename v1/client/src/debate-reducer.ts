@@ -1,7 +1,7 @@
 import {Map, fromJS} from "immutable";
 export default (
   state=Map({
-    activeDebateID: null,
+    activeDebateID: "test",
     byID: Map()
   }), 
   {type, payload}
@@ -14,9 +14,10 @@ export default (
       return state.setIn(
         ["byID", payload.debateID], 
         state
-          .get(payload.debateID, Map())
+          .getIn(["byID", payload.debateID], Map())
           .merge(Map({ 
-            loading: false,
+            isLoading: false,
+            isLoaded: false,
             error: payload.error
           }))
       );
@@ -24,9 +25,10 @@ export default (
       return state.setIn(
         ["byID", payload.debateID], 
         state
-          .get(payload.debateID, Map())
+          .getIn(["byID", payload.debateID], Map())
           .merge(Map({ 
-            loading: true,
+            isLoading: true,
+            isLoaded: false,
             error: null
           }))
       );
@@ -34,10 +36,11 @@ export default (
       return state.setIn(
         ["byID", payload.debateID], 
         state
-          .get(payload.id, Map())
+          .getIn(["byID", payload.id], Map())
           .merge(fromJS(payload.debate))
           .merge(Map({ 
-            loading: false,
+            isLoading: false,
+            isLoaded: true,
             error: null
           }))
       );

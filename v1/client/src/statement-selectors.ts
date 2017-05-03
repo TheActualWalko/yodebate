@@ -3,7 +3,7 @@ import {createSelector} from "reselect";
 import {getDebates, getActiveDebateID, getInitiatorID, getResponderID} from "./debate-selectors.ts";
 
 export const getStatements = state => state.get("statements", Map());
-export const getStatement = (state, {statementID}) => state.getIn(["statements", statementID], Map());
+export const getStatement = (state, {statementID}) => state.getIn(["statements", "byID", statementID], Map());
 
 const makeStatementGetter = (key, def = null) => createSelector(
   getStatement,
@@ -14,6 +14,9 @@ export const getAuthorID = makeStatementGetter("authorID", null);
 export const getDebateID = makeStatementGetter("debateID", null);
 export const getText = makeStatementGetter("text", "");
 export const getDate = makeStatementGetter("date", "");
+export const getIsLoading = makeStatementGetter("isLoading", false);
+export const getIsLoaded = makeStatementGetter("isLoaded", false);
+export const getError = makeStatementGetter("error", null);
 
 export const getIsInitiatorStatement = createSelector(
   [getAuthorID, getInitiatorID, getDebateID, getActiveDebateID],

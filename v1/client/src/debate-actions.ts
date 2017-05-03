@@ -1,7 +1,7 @@
 import api from "./api";
 import {createStructuredSelector} from "reselect";
 import {getActiveDebateID, getNewStatementText} from "./debate-selectors";
-import {receiveStatement} from "./statement-actions";
+import {getStatement, receiveStatement} from "./statement-actions";
 
 export const receiveDebate = ({ debateID, debate })=>({
   type: "RECEIVE_DEBATE",

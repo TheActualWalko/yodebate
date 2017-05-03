@@ -1,8 +1,12 @@
 import {Map} from "immutable";
 import {createSelector} from "reselect";
 
-export const getActiveAuthorID = state => state.get("activeAuthorID", null);
-export const getAuthor = (state, {authorID}) => state.getIn(["authors", authorID], Map());
+export const getAuthors = state => state.get("authors", Map());
+export const getActiveAuthorID = createSelector(
+  getAuthors,
+  authors => authors.get("activeAuthorID", null)
+);
+export const getAuthor = (state, {authorID}) => state.getIn(["authors", "byID", authorID], Map());
 
 const makeAuthorGetter = (key, def = null) => createSelector(
   getAuthor,
@@ -12,3 +16,6 @@ const makeAuthorGetter = (key, def = null) => createSelector(
 export const getName = makeAuthorGetter("name", "");
 export const getDescription = makeAuthorGetter("description", "");
 export const getImageURL = makeAuthorGetter("imageURL", "");
+export const getIsLoading = makeAuthorGetter("isLoading", false);
+export const getIsLoaded = makeAuthorGetter("isLoaded", false);
+export const getError = makeAuthorGetter("error", null);

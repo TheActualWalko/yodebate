@@ -10,9 +10,10 @@ export default (
       return state.setIn(
         ["byID", payload.statementID], 
         state
-          .get(payload.statementID, Map())
+          .getIn(["byID", payload.statementID], Map())
           .merge(Map({ 
-            loading: false,
+            isLoading: false,
+            isLoaded: false,
             error: payload.error
           }))
       );
@@ -20,9 +21,10 @@ export default (
       return state.setIn(
         ["byID", payload.statementID], 
         state
-          .get(payload.statementID, Map())
+          .getIn(["byID", payload.statementID], Map())
           .merge(Map({ 
-            loading: true,
+            isLoading: true,
+            isLoaded: false,
             error: null
           }))
       );
@@ -30,10 +32,11 @@ export default (
       return state.setIn(
         ["byID", payload.statementID], 
         state
-          .get(payload.statementID, Map())
+          .getIn(["byID", payload.statementID], Map())
           .merge(fromJS(payload.statement))
           .merge(Map({ 
-            loading: false,
+            isLoading: false,
+            isLoaded: true,
             error: null
           }))
       );

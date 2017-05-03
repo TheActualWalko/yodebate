@@ -236,6 +236,7 @@ p, .statement textarea, .annotation h5 {
   text-align: center;
   margin-bottom: 50px;
   height: 200px;
+  position: relative;
 }
 
 .statement-content-wrap {
