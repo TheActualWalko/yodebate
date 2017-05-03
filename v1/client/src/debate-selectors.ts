@@ -100,11 +100,11 @@ export const getNeedOpeningStatement = createSelector(
     getActiveAuthorIsInitiator,
     getActiveAuthorIsResponder
   ],
-  (openingStatementIDs, isInitiator, isResponder) => {
+  (statementIDs, isInitiator, isResponder) => {
     if (isInitiator) {
-      return openingStatementIDs.size === 0;
+      return statementIDs.size === 0;
     } else if (isResponder) {
-      return openingStatementIDs.size === 1;
+      return statementIDs.size === 1;
     } else {
       return false;
     }
