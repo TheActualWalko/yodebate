@@ -1,9 +1,10 @@
 import * as React    from "react";
 import * as ReactDOM from "react-dom";
 import Root from "./Root";
-import {onConnect} from "./api";
+import {onConnect, onUncache} from "./api";
 import store from "./store";
 import {setActiveAuthorID} from "./author-actions";
+import {receiveDebate} from "./debate-actions";
 
 const getAuthorID = ()=>{
   const location = window.location.href;
@@ -36,6 +37,10 @@ const getAuthorID = ()=>{
 onConnect(()=>{
   console.log("connected!");
   store.dispatch(setActiveAuthorID(getAuthorID()))
+});
+
+onUncache(({debateID, debate})=>{
+  store.dispatch(receiveDebate({debateID, debate}));
 });
 
 ReactDOM.render(React.createElement(Root), document.getElementById("react-container"));

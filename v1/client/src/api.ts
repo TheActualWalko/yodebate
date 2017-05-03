@@ -4,6 +4,8 @@ const socket = socketClient("http://localhost:3003");
 
 export const onConnect = (callback)=>socket.on("connect", callback);
 
+export const onUncache = (callback)=>socket.on("uncache", callback);
+
 const api = (endpoint, payload) => {
   console.log("calling", endpoint, JSON.stringify(payload));
   return new Promise((resolve, reject)=>{

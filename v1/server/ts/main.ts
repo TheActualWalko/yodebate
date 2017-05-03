@@ -60,6 +60,27 @@ const getIsMyTurn = (debateID, activeAuthorID) => {
   return (numStatements % 2) === (position === "initiator" ? 0 : 1);
 }
 
+const socketByAuthorID = {};
+
+const getOtherAuthor = (debateID, activeAuthorID) => {
+  const debate = debates[debateID];
+  if (debate.initiatorID === activeAuthorID) {
+    return debate.responderID;
+  } else if (debate.responderID === activeAuthorID) {
+    return debate.initiatorID;
+  }
+}
+
+const uncache = (authorID, debateID) => {
+  const socket = socketByAuthorID[authorID];
+  if (socket) {
+    socket.emit("uncache", {
+      debateID, 
+      debate: debates[debateID]
+    });
+  }
+}
+
 io.on("connection", (socket)=>{
 
   const register = (endpoint, handler)=>{
@@ -73,7 +94,9 @@ io.on("connection", (socket)=>{
 
   let activeAuthorID;
   register("authenticate", ({ authorID }, resolve)=>{
+    delete socketByAuthorID[activeAuthorID];
     activeAuthorID = authorID;
+    socketByAuthorID[authorID] = socket;
     resolve(authors[authorID]);
   });
   register("getDebate", ({ debateID }, resolve, reject)=>{
@@ -115,6 +138,7 @@ io.on("connection", (socket)=>{
     const position = getPosition(debateID, activeAuthorID);
     if (position) {
       debates[debateID].positionStatements[position] = text;
+      uncache(getOtherAuthor(debateID, activeAuthorID), debateID);
       resolve(debates[debateID]);
     } else {
       reject("You're not allowed to set a position statement now!");
@@ -132,6 +156,7 @@ io.on("connection", (socket)=>{
       statements[statementID] = statement;
       const debate = debates[debateID];
       debate.statementIDs.push(statementID);
+      uncache(getOtherAuthor(debateID, activeAuthorID), debateID);
       resolve({statementID, statement, debate});
     } else {
       reject("It's not your turn!");
