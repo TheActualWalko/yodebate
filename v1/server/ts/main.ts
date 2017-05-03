@@ -31,8 +31,8 @@ const debates = {
     initiatorID: "sam",
     responderID: "marc",
     positionStatements: {
-      initiator: "Initiator",
-      responder: "Responder"
+      initiator: "",
+      responder: ""
     },
     statementIDs: [],
     isOver: false
@@ -64,7 +64,7 @@ io.on("connection", (socket)=>{
 
   const register = (endpoint, handler)=>{
     socket.on(endpoint, (payload, callback)=>{
-      console.log(activeAuthorID, "called", endpoint, JSON.stringify(payload).slice(0,50));
+      console.log(activeAuthorID + " called " + endpoint, JSON.stringify(payload).slice(0,50));
       const reject = error => callback(error);
       const resolve = response => callback(null, response);
       handler(payload, resolve, reject);
