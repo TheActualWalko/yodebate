@@ -109,14 +109,15 @@ p, .statement textarea, .annotation h5 {
   font-size: 24px;
   padding-top: 9px;
   padding-right: 4px;
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
+  width: 54px;
+  height: 54px;
+  border-radius: 27px;
   position: absolute;
   left: 50%;
-  top: 50%;
-  margin-top: -25px;
-  margin-left: -25px;
+  margin-top: -27px;
+  margin-left: -27px;
+  z-index:3;
+  border:2px solid #333;
 }
 
 .initiator-position-statement {
@@ -235,7 +236,6 @@ p, .statement textarea, .annotation h5 {
 .statement {
   text-align: center;
   margin-bottom: 50px;
-  height: 200px;
   position: relative;
 }
 
@@ -243,17 +243,17 @@ p, .statement textarea, .annotation h5 {
   max-width: 610px;
   width: 50%;
   display: inline-block;
-  position: absolute;
+  position: relative;
   padding-right: 35px;
   padding-left: 35px;
 }
 
 .initiator-statement .statement-content-wrap {
-  right: 50%;
+  right: 25%;
 }
 
 .responder-statement .statement-content-wrap {
-  left: 50%;
+  left: 25%;
 }
 
 .statement * {
@@ -446,6 +446,9 @@ p, .statement textarea, .annotation h5 {
 }
 
 @media screen and (max-width:800px) {
+  body {
+    background-color: #333;
+  }
   .debate {
     padding-top: 0;
   }
@@ -490,22 +493,25 @@ p, .statement textarea, .annotation h5 {
   .responder-statement {
     background-color: #4965e2;
   }
+  .annotation-wrap {
+    padding:70px 20px;
+  }
   .annotation {
-    margin: 5px 0;
+    margin: 0 0;
     width: 100%;
   }
   .position-statements {
     height: auto;
+    margin-bottom: 0;
   }
   .position-statements .position-statement {
     color: white;
-    position: static;
+    position: relative;
     width: 100%;
     text-align: center;
-    margin-bottom: 2px;
   }
-  .position-statements .position-statement h3.ghost {
-    display: none;
+  .position-statements-vs + .position-statement{
+    margin-top:2px;
   }
   .position-statements .position-statement h3,
   .position-statements .position-statement .editor {
@@ -516,6 +522,10 @@ p, .statement textarea, .annotation h5 {
     box-shadow: none;
     padding: 35px 20px;
   }
+  .position-statements .position-statement h3.ghost {
+    font-weight: 100;
+    color:rgba(0,0,0,0.4);
+  }
   .position-statements .position-statement .editor textarea {
     min-height: 56px;
   }
@@ -523,16 +533,20 @@ p, .statement textarea, .annotation h5 {
     left: 20px;
     right: 20px;
   }
+  .position-statements .position-statement .editor footer button {
+    left: auto;
+    right: 0;
+  }
   .position-statements .initiator-position-statement {
     padding-right: 0
   }
   .position-statements .responder-position-statement {
     padding-left: 0
   }
-  .position-statements .initiator-position-statement h3:not(.ghost) {
+  .position-statements .initiator-position-statement h3 {
     background-color: #eb6302;
   }
-  .position-statements .responder-position-statement h3:not(.ghost) {
+  .position-statements .responder-position-statement h3 {
     background-color: #4965e2;
   }
 }

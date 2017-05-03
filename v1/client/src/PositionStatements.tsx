@@ -80,20 +80,12 @@ const renderResponderStatement = ({
   }
 }
 
-const renderVS = ({responderStatement, initiatorStatement}) => {
-  if (!!responderStatement && !!initiatorStatement) {
-    return <h4 className="position-statements-vs">vs</h4>;
-  } else {
-    return null;
-  }
-}
-
 const PositionStatements = (props) => (
   <header className="position-statements">
     <div className="position-statement initiator-position-statement">
       { renderInitiatorStatement(props) }
     </div>
-    { renderVS(props) }
+    <h4 className="position-statements-vs">vs</h4>
     <div className="position-statement responder-position-statement">
       { renderResponderStatement(props) }
     </div>
