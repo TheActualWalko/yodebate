@@ -74,11 +74,11 @@ const renderRebuttals = ({haveAllOpeningStatements, statementIDs, id})=>{
     : null;
 }
 
-const renderNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, isMyTurn, id})=>{
-  if (haveAllOpeningStatements) {
-    return isMyTurn
-      ? <NewStatement isRebuttal={true} />
-      : <Annotation title="That's all right now" subtitle="We'll notify you when your opponent responds" />;
+const renderNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, needPositionStatement, isMyTurn, id})=>{
+  if (haveAllOpeningStatements && isMyTurn) {
+    return <NewStatement isRebuttal={true} />
+  } else if (!needPositionStatement && !isMyTurn) {
+    return <Annotation title="That's all right now" subtitle="We'll notify you when your opponent responds" />;
   }
 }
 
