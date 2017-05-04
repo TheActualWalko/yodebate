@@ -114,10 +114,11 @@ p, .statement textarea, .annotation h5 {
   border-radius: 27px;
   position: absolute;
   left: 50%;
+  top: 50%;
   margin-top: -27px;
   margin-left: -27px;
   z-index:3;
-  border:2px solid #333;
+  border:2px solid white;
 }
 
 .initiator-position-statement {
@@ -509,6 +510,10 @@ p, .statement textarea, .annotation h5 {
     position: relative;
     width: 100%;
     text-align: center;
+  }
+  .position-statements .position-statements-vs {
+    top: auto;
+    border:2px solid #333;
   }
   .position-statements-vs + .position-statement{
     margin-top:2px;

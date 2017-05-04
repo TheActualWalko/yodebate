@@ -1,8 +1,17 @@
 import {Map, fromJS} from "immutable";
+const defaultNewDebate = {
+  positionStatements: {
+    initiator: ""
+  },
+  statementIDs: [],
+  newStatementText: ""
+};
 export default (
   state=Map({
     activeDebateID: "test",
-    byID: Map()
+    byID: fromJS({
+      "new": defaultNewDebate
+    })
   }), 
   {type, payload}
 ) => {
@@ -44,9 +53,19 @@ export default (
             error: null
           }))
       );
+    case "SET_NEW_DEBATE_POSITION_STATEMENT":
+      return state
+        .setIn(
+          ["byID", "new", "positionStatements", "initiator"],
+          state.getIn(["byID", "new", "newStatementText"])
+        )
+        .setIn(
+          ["byID", "new", "newStatementText"],
+          ""
+        );
     case "SET_NEW_STATEMENT_TEXT":
       return state.setIn(
-        ["byID", state.get("activeDebateID"), "newStatementText"],
+        ["byID", payload.debateID, "newStatementText"],
         payload.text
       );
     default: 

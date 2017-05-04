@@ -1,6 +1,6 @@
 import store from "./store";
 import socketClient = require("socket.io-client");
-const socket = socketClient("http://localhost:3003");
+const socket = socketClient(":3003");
 
 export const onConnect = (callback)=>socket.on("connect", callback);
 

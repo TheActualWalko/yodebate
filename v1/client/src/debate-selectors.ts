@@ -3,19 +3,20 @@ import {createSelector} from "reselect";
 import {getActiveAuthorID} from "./author-selectors";
 
 export const getDebates = state => state.get("debates", Map());
-export const getActiveDebateID = createSelector(
-  getDebates,
-  debates => debates.get("activeDebateID", null)
-);
 
-export const getActiveDebate = createSelector(
-  [getDebates, getActiveDebateID],
+export const getDebate = createSelector(
+  [getDebates, (_, {debateID}) => debateID],
   (debates, debateID) => debates.getIn(["byID", debateID], null)
 );
 
 const makeDebateGetter = (key, def = null) => createSelector(
-  getActiveDebate,
+  getDebate,
   debate => debate ? debate.get(key, def) : def
+);
+
+export const getIsNewDebate = createSelector(
+  (_, {debateID}) => debateID,
+  debateID => debateID === "new"
 );
 
 export const getIsOver = makeDebateGetter("isOver", false);
@@ -47,8 +48,10 @@ export const getResponderPositionStatement = createSelector(
 );
 
 export const getActiveAuthorIsInitiator = createSelector(
-  [getActiveAuthorID, getInitiatorID],
-  (activeAuthorID, initiatorID) => activeAuthorID !== null && activeAuthorID === initiatorID
+  [getIsNewDebate, getActiveAuthorID, getInitiatorID],
+  (isNewDebate, activeAuthorID, initiatorID) => {
+    return isNewDebate || (activeAuthorID !== null && activeAuthorID === initiatorID)
+  }
 );
 
 export const getActiveAuthorIsResponder = createSelector(

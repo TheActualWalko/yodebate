@@ -14,13 +14,13 @@ const mapStateToProps = createStructuredSelector({
   newStatementText: getNewStatementText
 });
 
-const mapDispatchToProps = (dispatch, {isRebuttal}) => {
+const mapDispatchToProps = (dispatch, {isRebuttal, debateID}) => {
   return {
     textChanged: (text)=>{
-      dispatch(setNewStatementText(text));
+      dispatch(setNewStatementText({text, debateID}));
     },
     submitClicked: (event)=>{
-      dispatch(submitNewStatement());
+      dispatch(submitNewStatement(debateID));
     }
   }
 }
@@ -70,4 +70,4 @@ const NewStatement = ({
   </article>
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewStatement);
+export default connect(mapStateToProps, mapDispatchToProps)(NewStatement) as React.ComponentClass<{debateID: any, isRebuttal: boolean}>;

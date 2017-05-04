@@ -21,13 +21,16 @@ const mapStateToProps = createStructuredSelector({
   newStatementText: getNewStatementText
 });
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, {debateID}) => {
   return {
     textChanged: (text)=>{
-      dispatch(setNewStatementText(text.replace(/[\r\n\v]+/g, '')));
+      dispatch(setNewStatementText({
+        debateID,
+        text: text.replace(/[\r\n\v]+/g, '')
+      }));
     },
     submitClicked: (event)=>{
-      dispatch(submitPositionStatement());
+      dispatch(submitPositionStatement(debateID));
     }
   }
 }
@@ -92,4 +95,4 @@ const PositionStatements = (props) => (
   </header>
 );
 
-export default connect(mapStateToProps, mapDispatchToProps)(PositionStatements);
+export default connect(mapStateToProps, mapDispatchToProps)(PositionStatements) as React.ComponentClass<{debateID: any}>;

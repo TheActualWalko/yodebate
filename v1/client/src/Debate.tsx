@@ -7,7 +7,7 @@ import {rebuttalCharLimit, openingStatementCharLimit} from "./limits";
 import {connect} from "react-redux";
 import {List} from "immutable";
 import {createStructuredSelector} from "reselect";
-import {getActiveDebate} from "./debate-actions";
+import {getDebate} from "./debate-actions";
 import loader from "./loader";
 import {
   getIsLoaded,
@@ -33,12 +33,12 @@ const mapStateToProps = createStructuredSelector({
   error: getError
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  load: ()=>dispatch(getActiveDebate())
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  load: ()=>dispatch(getDebate(ownProps.debateID))
 });
 
-const renderPositionStatements = ({id})=>{
-  return <PositionStatements />;
+const renderPositionStatements = ({debateID})=>{
+  return <PositionStatements debateID={debateID}/>;
 }
 
 const renderOpeningStatementsAnnotation = ({needPositionStatement})=>{
@@ -47,11 +47,11 @@ const renderOpeningStatementsAnnotation = ({needPositionStatement})=>{
     : null;
 }
 
-const renderOpeningStatements = ({needPositionStatement, needOpeningStatement, id, statementIDs})=>{
+const renderOpeningStatements = ({needPositionStatement, needOpeningStatement, debateID, statementIDs})=>{
   if (needPositionStatement) {
     return null;
   } else if (needOpeningStatement) {
-    return <NewStatement isRebuttal={false} /> 
+    return <NewStatement isRebuttal={false} debateID={debateID} /> 
   } else { 
     return statementIDs
       .slice(0,2)
@@ -60,13 +60,12 @@ const renderOpeningStatements = ({needPositionStatement, needOpeningStatement, i
 }
 
 const renderRebuttalsAnnotation = ({statementIDs, isMyTurn})=>{
-  console.log(statementIDs, statementIDs.size, isMyTurn);
   return (statementIDs.size >= 3 || (statementIDs.size === 2 && isMyTurn))
     ? <Annotation title="Rebuttals" subtitle="250 characters each" />
     : null;
 }
 
-const renderRebuttals = ({haveAllOpeningStatements, statementIDs, id})=>{
+const renderRebuttals = ({haveAllOpeningStatements, statementIDs, debateID})=>{
   return haveAllOpeningStatements
     ? statementIDs
       .slice(2)
@@ -74,23 +73,35 @@ const renderRebuttals = ({haveAllOpeningStatements, statementIDs, id})=>{
     : null;
 }
 
-const renderNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, needPositionStatement, isMyTurn, id})=>{
+const renderNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, needPositionStatement, isMyTurn, debateID})=>{
   if (haveAllOpeningStatements && isMyTurn) {
-    return <NewStatement isRebuttal={true} />
+    return <NewStatement isRebuttal={true} debateID={debateID}/>
   } else if (!needPositionStatement && !isMyTurn) {
     return <Annotation title="That's all right now" subtitle="We'll notify you when your opponent responds" />;
   }
 }
 
+const newify = (DebateView) => {
+  return (props) => {
+    const propsWithNew = {...props, debateID: "new"};
+    return <DebateView {...propsWithNew} />
+  }
+}
+
 const Debate = (props)=>(
-  <div className="debate">
-    { renderPositionStatements(props) }
-    { renderOpeningStatementsAnnotation(props) }
-    { renderOpeningStatements(props) }
-    { renderRebuttalsAnnotation(props) }
-    { renderRebuttals(props) }
-    { renderNewRebuttalOrFinalAnnotation(props) }
+  <div>
+    <div className="initiator-background"></div>
+    <div className="responder-background"></div>
+    <div className="debate">
+      { renderPositionStatements(props) }
+      { renderOpeningStatementsAnnotation(props) }
+      { renderOpeningStatements(props) }
+      { renderRebuttalsAnnotation(props) }
+      { renderRebuttals(props) }
+      { renderNewRebuttalOrFinalAnnotation(props) }
+    </div>
   </div>
 );
 
 export default connect(mapStateToProps, mapDispatchToProps)(loader(Debate));
+export const NewDebate = newify(connect(mapStateToProps, mapDispatchToProps)(Debate));

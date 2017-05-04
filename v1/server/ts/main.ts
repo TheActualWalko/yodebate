@@ -119,20 +119,36 @@ io.on("connection", (socket)=>{
       reject("This debate is full!");
     }
   });
-  register("startDebate", ({}, resolve, reject)=>{
-    const debateID = randomID();
-    const debate = {
-      initiatorID: activeAuthorID,
-      responderID: null,
-      positionStatements: {
-        initiator: null,
-        responder: null
-      },
-      statementIDs: [],
-      isOver: false
-    };
-    debates[debateID] = debate;
-    resolve({debate, debateID});
+  register("startDebate", ({
+    positionStatementText,
+    openingStatementText
+  }, resolve, reject)=>{
+    if (!positionStatementText || !openingStatementText) {
+      reject("You must supply a position and opening statement");
+    } else {
+      const debateID = randomID();
+      const statementID = randomID();
+      const statement = {
+        debateID,
+        text: openingStatementText,
+        authorID: activeAuthorID,
+        date: new Date().getTime()
+      };
+      const debate = {
+        initiatorID: activeAuthorID,
+        responderID: null,
+        positionStatements: {
+          initiator: positionStatementText,
+          responder: null
+        },
+        statementIDs: [statementID],
+        isOver: false
+      };
+      debates[debateID] = debate;
+      statements[statementID] = statement;
+      console.log(debate, statement);
+      resolve({debate, debateID, statement, statementID});
+    }
   });
   register("setPositionStatement", ({ debateID, text }, resolve, reject)=>{
     const position = getPosition(debateID, activeAuthorID);

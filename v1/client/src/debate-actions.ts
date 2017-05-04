@@ -1,7 +1,7 @@
 import api from "./api";
-import {createStructuredSelector} from "reselect";
-import {getActiveDebateID, getNewStatementText} from "./debate-selectors";
+import {getNewStatementText, getInitiatorPositionStatement} from "./debate-selectors";
 import {getStatement, receiveStatement} from "./statement-actions";
+import {push} from "react-router-redux";
 
 export const receiveDebate = ({ debateID, debate })=>({
   type: "RECEIVE_DEBATE",
@@ -13,9 +13,8 @@ export const debateError = ({ debateID, error })=>({
   payload: { debateID, error }
 });
 
-export const getActiveDebate = () => {
+export const getDebate = (debateID) => {
   return (dispatch, getState) => {
-    const debateID = getActiveDebateID(getState());
     dispatch({
       type: "REQUEST_DEBATE",
       payload: { debateID }
@@ -26,43 +25,64 @@ export const getActiveDebate = () => {
   }
 }
 
-export const submitPositionStatement = () => {
+export const submitPositionStatement = (debateID) => {
   return (dispatch, getState) => {
-    const positionStatement = createStructuredSelector({
-      debateID: getActiveDebateID,
-      text: getNewStatementText
-    })(getState());
-    const {debateID} = positionStatement;
-    api("setPositionStatement", positionStatement)
-      .then((debate)=>dispatch(receiveDebate({ debateID, debate })))
-      .catch((error)=>dispatch(debateError({ debateID, error })));
+    if (debateID === "new") {
+      dispatch({ type: "SET_NEW_DEBATE_POSITION_STATEMENT" });
+    } else {
+      const positionStatement = {
+        debateID,
+        text: getNewStatementText(getState(), {debateID})
+      };
+      api("setPositionStatement", positionStatement)
+        .then((debate)=>dispatch(receiveDebate({ debateID, debate })))
+        .catch((error)=>dispatch(debateError({ debateID, error })));
+    }
   }
 }
 
-export const submitNewStatement = () => {
+export const submitNewStatement = (debateID) => {
   return (dispatch, getState) => {
-    const payload = createStructuredSelector({
-      debateID: getActiveDebateID, 
-      text: getNewStatementText 
-    })(getState());
-    api(
-      "addStatement", 
-      payload
-    ).then(
-      ({statementID, statement, debate})=>{
-        const {debateID} = statement;
-        dispatch(receiveStatement({ statementID, statement }));
-        dispatch(receiveDebate({ debateID, debate }));
-      }
-    ).catch(
-      (error)=>dispatch(debateError({ debateID: payload.debateID, error }))
-    );
+    const state = getState();
+    if (debateID === "new") {
+      api(
+        "startDebate", 
+        {
+          positionStatementText: getInitiatorPositionStatement(state, {debateID}),
+          openingStatementText: getNewStatementText(state, {debateID})
+        }
+      ).then(
+      ({statementID, statement, debateID, debate})=>{
+          dispatch(receiveStatement({ statementID, statement }));
+          dispatch(receiveDebate({ debateID, debate }));
+          dispatch(push("/" + debateID));
+        }
+      ).catch(
+        (error)=>dispatch(debateError({ debateID: "new", error }))
+      );
+    } else {
+      const payload = {
+        debateID, 
+        text: getNewStatementText(state, {debateID})
+      };
+      api(
+        "addStatement", 
+        payload
+      ).then(
+        ({statementID, statement, debate})=>{
+          dispatch(receiveStatement({ statementID, statement }));
+          dispatch(receiveDebate({ debateID, debate }));
+        }
+      ).catch(
+        (error)=>dispatch(debateError({ debateID: payload.debateID, error }))
+      );
+    }
   }
 }
 
-export const setNewStatementText = (text) => {
+export const setNewStatementText = ({debateID, text}) => {
   return {
     type: "SET_NEW_STATEMENT_TEXT",
-    payload: { text }
+    payload: { debateID, text }
   }
 }

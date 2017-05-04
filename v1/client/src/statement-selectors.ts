@@ -1,6 +1,6 @@
 import {Map} from "immutable";
 import {createSelector} from "reselect";
-import {getDebates, getActiveDebateID, getInitiatorID, getResponderID} from "./debate-selectors.ts";
+import {getDebates, getInitiatorID, getResponderID} from "./debate-selectors.ts";
 
 export const getStatements = state => state.get("statements", Map());
 export const getStatement = (state, {statementID}) => state.getIn(["statements", "byID", statementID], Map());
@@ -18,21 +18,29 @@ export const getIsLoading = makeStatementGetter("isLoading", false);
 export const getIsLoaded = makeStatementGetter("isLoaded", false);
 export const getError = makeStatementGetter("error", null);
 
+export const getStatementDebate = createSelector(
+  [getDebateID, getDebates],
+  (debateID, debates) => debates.getIn(["byID", debateID], Map())
+);
+
+export const getDebateInitiatorID = createSelector(
+  getStatementDebate,
+  debate => debate.get("initiatorID", null)
+);
+
+export const getDebateResponderID = createSelector(
+  getStatementDebate,
+  debate => debate.get("responderID", null)
+);
+
 export const getIsInitiatorStatement = createSelector(
-  [getAuthorID, getInitiatorID, getDebateID, getActiveDebateID],
-  (authorID, initiatorID, debateID, activeDebateID) => 
-    authorID === initiatorID && debateID === activeDebateID
+  [getAuthorID, getDebateInitiatorID],
+  (authorID, initiatorID) => authorID === initiatorID
 );
 
 export const getIsResponderStatement = createSelector(
-  [getAuthorID, getResponderID, getDebateID, getActiveDebateID],
-  (authorID, responderID, debateID, activeDebateID) => 
-    authorID === responderID && debateID === activeDebateID
-);
-
-export const getStatementDebate = createSelector(
-  [getDebateID, getDebates],
-  (debateID, debates) => debates.get(debateID, null)
+  [getAuthorID, getDebateResponderID],
+  (authorID, responderID) => authorID === responderID
 );
 
 export const getPermalink = createSelector(
