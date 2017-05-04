@@ -55,8 +55,18 @@ export const getActiveAuthorIsInitiator = createSelector(
 );
 
 export const getActiveAuthorIsResponder = createSelector(
-  [getActiveAuthorID, getResponderID],
-  (activeAuthorID, responderID) => activeAuthorID !== null && activeAuthorID === responderID
+  [getActiveAuthorID, getInitiatorID, getResponderID],
+  (activeAuthorID, initiatorID, responderID) => activeAuthorID !== null && (
+    activeAuthorID === responderID
+    ||
+    (
+      responderID === null 
+      &&
+      initiatorID !== null
+      && 
+      activeAuthorID !== initiatorID
+    )
+  );
 );
 
 export const getNeedPositionStatement = createSelector(

@@ -111,14 +111,6 @@ io.on("connection", (socket)=>{
     const author = authors[authorID];
     author ? resolve(author) : reject("No author found with id " + authorID);
   });
-  register("joinDebate", ({ debateID }, resolve, reject)=>{
-    if (!debates[debateID].responderID) {
-      debates[debateID].responderID = activeAuthorID;
-      resolve(debates[debateID]);
-    } else {
-      reject("This debate is full!");
-    }
-  });
   register("startDebate", ({
     positionStatementText,
     openingStatementText
@@ -151,6 +143,9 @@ io.on("connection", (socket)=>{
     }
   });
   register("setPositionStatement", ({ debateID, text }, resolve, reject)=>{
+    if (!debates[debateID].responderID) {
+      debates[debateID].responderID = activeAuthorID;
+    } 
     const position = getPosition(debateID, activeAuthorID);
     if (position) {
       debates[debateID].positionStatements[position] = text;

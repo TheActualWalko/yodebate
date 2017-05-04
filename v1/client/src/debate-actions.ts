@@ -20,13 +20,6 @@ export const getDebate = (debateID) => {
       payload: { debateID }
     });
     api("getDebate", { debateID })
-      .then((debate)=>{
-        if (!debate.responderID) {
-          return api("joinDebate", {debateID})
-        } else {
-          return debate;
-        }
-      })
       .then((debate)=>dispatch(receiveDebate({ debateID, debate })))
       .catch((error)=>dispatch(debateError({ debateID, error })));
   }
