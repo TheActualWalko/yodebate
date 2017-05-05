@@ -6,7 +6,19 @@ export const getActiveAuthorID = createSelector(
   getAuthors,
   authors => authors.get("activeAuthorID", null)
 );
-export const getAuthor = (state, {authorID}) => state.getIn(["authors", "byID", authorID], Map());
+export const getAuthTested = createSelector(
+  getAuthors,
+  authors => authors.get("authTested", false)
+);
+export const getIsLoggedIn = createSelector(
+  [getAuthTested, getActiveAuthorID],
+  (authTested, activeAuthorID) => authTested && activeAuthorID
+);
+export const getAuthor = (state, {authorID}) => (
+  authorID 
+    ? state.getIn(["authors", "byID", authorID], Map())
+    : state.getIn(["authors", "byID", getActiveAuthorID(state)], Map())
+);
 
 const makeAuthorGetter = (key, def = null) => createSelector(
   getAuthor,

@@ -2,11 +2,16 @@ import {Map, fromJS} from "immutable";
 export default (
   state=Map({
     activeAuthorID: null,
+    authTested: false,
     byID: Map()
   }), 
   {type, payload}
 ) => {
   switch (type) {
+    case "RECEIVE_UNAUTHORIZED":
+      return state.set("authTested", true);
+    case "RECEIVE_UNAUTHORIZED":
+      return state.set("authTested", true);
     case "SET_ACTIVE_AUTHOR_ID":
       return state
         .set("activeAuthorID", payload.authorID);

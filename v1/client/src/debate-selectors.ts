@@ -66,7 +66,7 @@ export const getActiveAuthorIsResponder = createSelector(
       && 
       activeAuthorID !== initiatorID
     )
-  );
+  )
 );
 
 export const getNeedPositionStatement = createSelector(

@@ -1,42 +1,41 @@
+declare const FB: any;
 import * as React    from "react";
 import * as ReactDOM from "react-dom";
 import Root from "./Root";
 import {onConnect, onUncache} from "./api";
 import store from "./store";
-import {setActiveAuthorID} from "./author-actions";
+import {receiveFacebookLoginStatus} from "./author-actions";
 import {receiveDebate} from "./debate-actions";
 
-const getAuthorID = ()=>{
-  const location = window.location.href;
-  let nextLocation;
-  const storage = window.localStorage;
-  let authorIDfromURL;
-  if (location.indexOf("?authorID=") >= 0) {
-    authorIDfromURL = location.split("?authorID=")[1].split("&")[0];
-  } else if (location.indexOf("&authorID=") >= 0) {
-    authorIDfromURL = location.split("&authorID=")[1].split("&")[0];
+let fbInit = false;
+let connected = false;
+
+const maybeAuthenticate = ()=>{
+  if (fbInit && connected) {
+    FB.getLoginStatus(response=>{
+      const action: any = receiveFacebookLoginStatus(response);
+      store.dispatch(action);
+    });
   }
-  if (authorIDfromURL) {
-    storage.setItem("authorID", authorIDfromURL);
-    if (location.indexOf("?authorID="+authorIDfromURL+"&") >= 0) {
-      nextLocation = location.replace("?authorID="+authorIDfromURL+"&", "");
-    } else if (location.indexOf("?authorID="+authorIDfromURL) >= 0) {
-      nextLocation = location.replace("?authorID="+authorIDfromURL, "");
-    } else if (location.indexOf("authorID="+authorIDfromURL+"&") >= 0) {
-      nextLocation = location.replace("authorID="+authorIDfromURL+"&", "");
-    } else {
-      nextLocation = location.replace("authorID="+authorIDfromURL, "");
-    }
-    window.location.href = nextLocation;
-  }
-  if (storage.getItem("authorID")) {
-    return storage.getItem("authorID");
-  }
+};
+
+window["fbAsyncInit"] = function() {
+  console.log("FB init!");
+  FB.init({
+    appId      : '122114921684013',
+    cookie     : true,
+    xfbml      : true,
+    version    : 'v2.8'
+  });
+  FB.AppEvents.logPageView();
+  fbInit = true;
+  maybeAuthenticate();
 };
 
 onConnect(()=>{
   console.log("connected!");
-  store.dispatch(setActiveAuthorID(getAuthorID()))
+  connected = true;
+  maybeAuthenticate();
 });
 
 onUncache(({debateID, debate})=>{

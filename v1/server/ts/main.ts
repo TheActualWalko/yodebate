@@ -1,6 +1,7 @@
 const app  = require("express")();
 const http = require("http").Server(app);
 const io   = require("socket.io")(http);
+const request = require("request");
 
 const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
 const charsLength = chars.length;
@@ -11,19 +12,6 @@ const randomID = ()=>{
     output += chars[Math.floor(Math.random() * charsLength)];
   }
   return output;
-}
-
-const authors = {
-  sam: {
-    imageURL: "sam.png",
-    name: "Sam Watkinson",
-    description: "Morality Engineer"
-  },
-  marc: {
-    imageURL: "marc.png",
-    name: "Marc Burns",
-    description: "Hedge Fund Roboticist"
-  }
 }
 
 const debates = {
@@ -93,11 +81,22 @@ io.on("connection", (socket)=>{
   }
 
   let activeAuthorID;
-  register("authenticate", ({ authorID }, resolve)=>{
-    delete socketByAuthorID[activeAuthorID];
-    activeAuthorID = authorID;
-    socketByAuthorID[authorID] = socket;
-    resolve(authors[authorID]);
+  register("authenticate", ({ facebookToken }, resolve, reject)=>{
+    request(
+      `https://graph.facebook.com/me?access_token=${facebookToken}`,
+      (error, response, body)=>{
+        if (!error) {
+          const authorID = JSON.parse(body).id;
+          delete socketByAuthorID[activeAuthorID];
+          activeAuthorID = authorID;
+          socketByAuthorID[authorID] = socket;
+          resolve({ authorID });
+        } else {
+          reject(error);
+        }
+      }
+    );
+    
   });
   register("getDebate", ({ debateID }, resolve, reject)=>{
     const debate = debates[debateID];
@@ -106,10 +105,6 @@ io.on("connection", (socket)=>{
   register("getStatement", ({ statementID }, resolve, reject)=>{
     const statement = statements[statementID];
     statement ? resolve(statement) : reject("No statement found with id " + statementID);
-  });
-  register("getAuthor", ({ authorID }, resolve, reject)=>{
-    const author = authors[authorID];
-    author ? resolve(author) : reject("No author found with id " + authorID);
   });
   register("startDebate", ({
     positionStatementText,
@@ -138,7 +133,6 @@ io.on("connection", (socket)=>{
       };
       debates[debateID] = debate;
       statements[statementID] = statement;
-      console.log(debate, statement);
       resolve({debate, debateID, statement, statementID});
     }
   });
