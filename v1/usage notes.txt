@@ -1,3 +1,5 @@
+- FF issues (might need to build to ES5)
+
 - No indication of opponent activity 
 
 - User did not offer an incompatible view as their position statement:
