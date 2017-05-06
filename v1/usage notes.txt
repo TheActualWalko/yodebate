@@ -16,3 +16,9 @@
 # Feature Ideas/other stuff
 
 - Search/Indexing for people who just want to read debates
+
+- Find a way to support "Devil's advocate"-type positions
+  - With your identity attached to every post, you will be disinclined to take on positions that you don't really believe
+  - This will prevent certain interesting types of discussions from happening, e.g. debates that test a viewpoint everyone agrees with by taking a contrarian position for the sake of argument
+  - To accomplish this without opening the floodgates (allowing anonymous posting) we can preface every message on the contrarian's side with a note indicating their true alignment on the issue. "This user is playing devil's advocate and does not actually support the side for which they are arguing." 
+  - May be a good idea to sneak this in to any copy-pasting of the user's statements.
