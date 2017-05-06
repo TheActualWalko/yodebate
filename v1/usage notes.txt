@@ -1,3 +1,8 @@
+- Users on small screens are not aware that they have to submit an opening statement before sending the link
+  - Grouping position statement and opening statements is one possible solution
+
+- Textarea fails to expand when content is longer than two lines
+
 - FF issues (might need to build to ES5)
 
 - No indication of opponent activity 
