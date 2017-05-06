@@ -8,12 +8,13 @@ export default (
   {type, payload}
 ) => {
   switch (type) {
-    case "RECEIVE_UNAUTHORIZED":
-      return state.set("authTested", true);
-    case "RECEIVE_UNAUTHORIZED":
-      return state.set("authTested", true);
+    case "RECEIVE_UNAUTHENTICATED":
+      return state
+        .set("authTested", true)
+        .set("activeAuthorID", null);
     case "SET_ACTIVE_AUTHOR_ID":
       return state
+        .set("authTested", true)
         .set("activeAuthorID", payload.authorID);
     case "AUTHOR_ERROR":
       return state.setIn(
