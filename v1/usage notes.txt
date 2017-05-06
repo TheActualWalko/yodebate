@@ -5,3 +5,9 @@
 - User did not offer an incompatible view as their position statement:
 
   "It is fair to assume the world is flat." can be true along with "It is fair to assume the world is spherical with a certain circumference and mas" [sic]
+
+
+
+# Feature Ideas/other stuff
+
+- Search/Indexing for people who just want to read debates
