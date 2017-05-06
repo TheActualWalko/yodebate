@@ -29,6 +29,7 @@
     - Monitors responses (which contain a position statement and a hidden opening statement)
     - Writes an opening statement responding to the position statements that he or she finds most compelling
     - And then is able to see the responder's opening statement and begin the debate.
+    - Sort of like "tinder for disagreements"
 
 - Find a way to support "Devil's advocate"-type positions
   - With your identity attached to every post, you will be disinclined to take on positions that you don't really believe
