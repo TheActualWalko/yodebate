@@ -1,5 +1,6 @@
 import React = require("react");
 import Annotation from "./Annotation";
+import LinkAnnotation from "./LinkAnnotation";
 import Statement from "./Statement";
 import NewStatement from "./NewStatement";
 import PositionStatements from "./PositionStatements";
@@ -13,6 +14,7 @@ import {
   getIsLoaded,
   getIsLoading,
   getError,
+  getResponderID,
   getInitiatorPositionStatement,
   getResponderPositionStatement,
   getIsActiveAuthorTurn, 
@@ -21,8 +23,11 @@ import {
   getHaveAllOpeningStatements,
   getStatementIDs
 } from "./debate-selectors"
+import { getIsLoggedIn } from "./author-selectors";
 
 const mapStateToProps = createStructuredSelector({
+  responderID: getResponderID,
+  isLoggedIn: getIsLoggedIn,
   isLoaded: getIsLoaded,
   isLoading: getIsLoading,
   isMyTurn: getIsActiveAuthorTurn,
@@ -73,11 +78,15 @@ const renderRebuttals = ({haveAllOpeningStatements, statementIDs, debateID})=>{
     : null;
 }
 
-const renderNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, needPositionStatement, isMyTurn, debateID})=>{
+const renderNewRebuttalOrFinalAnnotation = ({haveAllOpeningStatements, needPositionStatement, isMyTurn, debateID, responderID})=>{
   if (haveAllOpeningStatements && isMyTurn) {
     return <NewStatement isRebuttal={true} debateID={debateID}/>
   } else if (!needPositionStatement && !isMyTurn) {
-    return <Annotation title="That's all right now" subtitle="We'll notify you when your opponent responds" />;
+    if (!!responderID) {
+      return <Annotation title="That's all right now" subtitle="We'll notify you when your opponent responds" />;
+    } else {
+      return <LinkAnnotation subtitle="Send this link to your opponent to invite them!" />;
+    }
   }
 }
 
@@ -92,14 +101,14 @@ const Debate = (props)=>(
   <div>
     <div className="initiator-background"></div>
     <div className="responder-background"></div>
-    <div className="debate">
+    { props.isLoggedIn && <div className="debate">
       { renderPositionStatements(props) }
       { renderOpeningStatementsAnnotation(props) }
       { renderOpeningStatements(props) }
       { renderRebuttalsAnnotation(props) }
       { renderRebuttals(props) }
       { renderNewRebuttalOrFinalAnnotation(props) }
-    </div>
+    </div> }
   </div>
 );
 

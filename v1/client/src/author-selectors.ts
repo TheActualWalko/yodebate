@@ -10,10 +10,6 @@ export const getAuthTested = createSelector(
   getAuthors,
   authors => authors.get("authTested", false)
 );
-export const getIsLoggedIn = createSelector(
-  [getAuthTested, getActiveAuthorID],
-  (authTested, activeAuthorID) => authTested && activeAuthorID
-);
 export const getAuthor = (state, {authorID}) => (
   authorID 
     ? state.getIn(["authors", "byID", authorID], Map())
@@ -31,3 +27,8 @@ export const getImageURL = makeAuthorGetter("imageURL", "");
 export const getIsLoading = makeAuthorGetter("isLoading", false);
 export const getIsLoaded = makeAuthorGetter("isLoaded", false);
 export const getError = makeAuthorGetter("error", null);
+
+export const getIsLoggedIn = createSelector(
+  [getAuthTested, getActiveAuthorID],
+  (authTested, activeAuthorID) => authTested && !!activeAuthorID
+);

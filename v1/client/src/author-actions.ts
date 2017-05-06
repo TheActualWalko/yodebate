@@ -43,6 +43,14 @@ export const facebookLogin = ()=>{
   };
 };
 
+export const facebookLogout = ()=>{
+  return (dispatch, getState) => {
+    dispatch(receiveUnauthenticated());
+    api("logout", {});
+    FB.logout();
+  };
+};
+
 export const receiveFacebookLoginStatus = ({status, authResponse}) => {
   if (status === "connected") {
     return receiveFacebookSession(authResponse);

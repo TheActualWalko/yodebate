@@ -96,7 +96,10 @@ io.on("connection", (socket)=>{
         }
       }
     );
-    
+  });
+  register("logout", ()=>{
+    delete socketByAuthorID[activeAuthorID];
+    activeAuthorID = null;
   });
   register("getDebate", ({ debateID }, resolve, reject)=>{
     const debate = debates[debateID];
