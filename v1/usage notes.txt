@@ -19,6 +19,8 @@
 
 - Indexing for "all of my debates"
 
+- Paste a link to a user's profile to allow only them to become the responder
+
 - Find a way to support "Devil's advocate"-type positions
   - With your identity attached to every post, you will be disinclined to take on positions that you don't really believe
   - This will prevent certain interesting types of discussions from happening, e.g. debates that test a viewpoint everyone agrees with by taking a contrarian position for the sake of argument
