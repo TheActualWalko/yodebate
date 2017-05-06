@@ -2,7 +2,7 @@
   "compileOnSave": false,
   "compilerOptions": {
     "sourceMap" : true,
-    "target": "ES6",
+    "target": "ES5",
     "module": "commonjs",
     "jsx": "react"
   }

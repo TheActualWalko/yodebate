@@ -1,5 +1,7 @@
 import store from "./store";
 import socketClient = require("socket.io-client");
+import es6promise = require("es6-promise");
+const Promise: any = es6promise.Promise;
 const socket = socketClient(":3003");
 
 export const onConnect = (callback)=>socket.on("connect", callback);
