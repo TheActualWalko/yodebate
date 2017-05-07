@@ -1,10 +1,3 @@
-- Users on small screens are not aware that they have to submit an opening statement before sending the link
-  - Grouping position statement and opening statements is one possible solution
-
-- Textarea fails to expand when content is longer than two lines
-
-- FF issues (might need to build to ES5)
-
 - No indication of opponent activity 
 
 - User did not offer an incompatible view as their position statement:
@@ -15,24 +8,35 @@
 
 # Feature Ideas/other stuff
 
-- Search/Indexing for people who just want to read debates
+Top priorities:
 
-- Indexing for "all of my debates"
+  - "Who are you" modal with selection of default profile pictures (for reddit users)
+    "it looks like you came from reddit. to make it easier for others to follow the discussion, you may want to use your reddit username"
 
-- Paste a link to a user's profile to allow only them to become the responder OR...
+  - Debate Proposal: state a position, and everyone who bites at it starts a new debate with you.
+    - This can be the single way that debates work!! This solves the 'select a responder' problem - just continue the debate that your responder starts
+    - Debates are now a child of a "proposal" or something; one proposal contains many responses.
+      - A user creates a proposal with only a position statement
+      - Shares the link
+      - Monitors responses (which contain a position statement and a hidden opening statement)
+      - Writes an opening statement responding to the position statements that he or she finds most compelling
+      - And then is able to see the responder's opening statement and begin the debate.
+      - Sort of like "tinder for disagreements"
 
-- Debate Proposal: state a position, and everyone who bites at it starts a new debate with you.
-  - This can be the single way that debates work!! This solves the 'select a responder' problem - just continue the debate that your responder starts
-  - Debates are now a child of a "proposal" or something; one proposal contains many responses.
-    - A user creates a proposal with only a position statement
-    - Shares the link
-    - Monitors responses (which contain a position statement and a hidden opening statement)
-    - Writes an opening statement responding to the position statements that he or she finds most compelling
-    - And then is able to see the responder's opening statement and begin the debate.
-    - Sort of like "tinder for disagreements"
+Secondary priorities:
+  
+  - Error handling: invalid debate, invalid author, invalid statement
 
-- Find a way to support "Devil's advocate"-type positions
-  - With your identity attached to every post, you will be disinclined to take on positions that you don't really believe
-  - This will prevent certain interesting types of discussions from happening, e.g. debates that test a viewpoint everyone agrees with by taking a contrarian position for the sake of argument
-  - To accomplish this without opening the floodgates (allowing anonymous posting) we can preface every message on the contrarian's side with a note indicating their true alignment on the issue. "This user is playing devil's advocate and does not actually support the side for which they are arguing." 
-  - May be a good idea to sneak this in to any copy-pasting of the user's statements.
+  - Indexing for "all of my debates"
+
+  - Search/Indexing for people who just want to read debates
+
+Distant/partially-formed plans:
+
+  - Find a way to support "Devil's advocate"-type positions
+    - With your identity attached to every post, you will be disinclined to take on positions that you don't really believe
+    - This will prevent certain interesting types of discussions from happening, e.g. debates that test a viewpoint everyone agrees with by taking a contrarian position for the sake of argument
+    - To accomplish this without opening the floodgates (allowing anonymous posting) we can preface every message on the contrarian's side with a note indicating their true alignment on the issue. "This user is playing devil's advocate and does not actually support the side for which they are arguing." 
+    - May be a good idea to sneak this in to any copy-pasting of the user's statements.
+
+  - Find sources without leaving the app, using suggested indexes of scientific studies and reporting.
