@@ -12,9 +12,8 @@
 
 Top priorities:
 
-  - "Who are you" modal with selection of default profile pictures (for reddit users)
-    "it looks like you came from reddit. to make it easier for others to follow the discussion, you may want to use your reddit username"
-
+  - Login with Reddit
+  
   - Notifications!
 
   - Edit position before submitting opening statement
