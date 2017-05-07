@@ -86,10 +86,30 @@ const renderResponderStatement = ({
   }
 }
 
+const renderInitiatorAdvice = ({
+  initiatorStatement,
+  activeAuthorIsInitiator
+}) => {
+  if (activeAuthorIsInitiator && !initiatorStatement) {
+    return <div className="advice">
+      <p>
+        <strong>You're about to open a new debate!</strong>
+      </p>
+      <p>That's super. Some advice on stating your position:</p>
+      <ul>
+        <li>Keep it short: <strong>"Han would shoot first"</strong> is better than <strong>"The original cut of Star Wars more accurately captured the character of Han Solo"</strong></li>
+        <li>Keep it specific: <strong>"Picard was a more effective captain than Kirk"</strong> is better than <strong>"Picard is better than Kirk"</strong></li>
+        <li>Keep it reasonable: <strong>"Internet Explorer is a relatively low-quality product"</strong> is better than <strong>"Internet Explorer is total garbage"</strong></li>
+      </ul>
+    </div>
+  }
+}
+
 const PositionStatements = (props) => (
   <header className="position-statements">
     <div className="position-statement initiator-position-statement">
       { renderInitiatorStatement(props) }
+      { renderInitiatorAdvice(props) }
     </div>
     { (props.haveAllOpeningStatements || props.activeAuthorIsResponder) && <h4 className="position-statements-vs">vs</h4> }
     { (props.haveAllOpeningStatements || props.activeAuthorIsResponder) && <div className="position-statement responder-position-statement">

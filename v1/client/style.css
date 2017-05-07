@@ -149,6 +149,21 @@ p, .statement textarea, .annotation h5 {
   position: absolute;
 }
 
+.position-statements .advice {
+  margin-top: 35px;
+  padding:0 15px;
+  text-align: left;
+  color: rgba(0,0,0,0.5);
+}
+
+.position-statements .advice p {
+  font-family: "PT Sans";
+}
+
+.position-statements .advice li {
+  margin-bottom: 5px;
+}
+
 .position-statements .position-statements-vs {
   font-family: "PT Serif";
   font-style: italic;
@@ -364,7 +379,7 @@ p, .statement textarea, .annotation h5 {
 }
 
 .main-header .new-debate-link {
-  margin: 5px 0 15px 0;
+  margin: 5px 0 5px 15px;
   float:right;
 }
 

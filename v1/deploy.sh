@@ -2,9 +2,11 @@
 cd ./client;
 ./build.sh;
 cd ..;
+scp ./client/style.css root@sam-watkinson.com:/var/www/yodebate/public/style.css;
+scp ./client/dist/bundle.js root@sam-watkinson.com:/var/www/yodebate/public/dist/bundle.js;
+scp ./client/dist/vendor.bundle.js root@sam-watkinson.com:/var/www/yodebate/public/dist/vendor.bundle.js;
 scp ./client/index.html root@sam-watkinson.com:/var/www/yodebate/public/index.html;
 scp ./client/manifest.json root@sam-watkinson.com:/var/www/yodebate/public/manifest.json;
-scp ./client/style.css root@sam-watkinson.com:/var/www/yodebate/public/style.css;
 scp ./client/sam.png root@sam-watkinson.com:/var/www/yodebate/public/sam.png;
 scp ./client/marc.png root@sam-watkinson.com:/var/www/yodebate/public/marc.png;
 scp ./client/browserconfig.xml root@sam-watkinson.com:/var/www/yodebate/public/browserconfig.xml;
@@ -17,8 +19,6 @@ scp ./client/favicon-16x16.png root@sam-watkinson.com:/var/www/yodebate/public/f
 scp ./client/favicon-32x32.png root@sam-watkinson.com:/var/www/yodebate/public/favicon-32x32.png;
 scp ./client/favicon-base.png root@sam-watkinson.com:/var/www/yodebate/public/favicon-base.png;
 scp ./client/mstile-150x150.png root@sam-watkinson.com:/var/www/yodebate/public/mstile-150x150.png;
-scp ./client/dist/bundle.js root@sam-watkinson.com:/var/www/yodebate/public/dist/bundle.js;
-scp ./client/dist/vendor.bundle.js root@sam-watkinson.com:/var/www/yodebate/public/dist/vendor.bundle.js;
 
 cd ./server;
 ./build.sh;

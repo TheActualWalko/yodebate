@@ -30,14 +30,28 @@ const LoginLogout = (props)=>{
   } else if (props.isLoggedIn) {
     return <button onClick={props.facebookLogout}>Log Out</button>
   } else {
-    return <button onClick={props.facebookLogin}>Log in with Facebook</button>
+    if (props.link !== "/") {
+      return <button onClick={props.facebookLogin}>Log in to view this debate</button>
+    } else {
+      return <button onClick={props.facebookLogin}>Log in with Facebook</button>
+    }
+  }
+}
+
+const NewDebateButton = (props)=>{
+  if (props.authTested && props.isLoggedIn && props.link !== "/") {
+    return <Link className="new-debate-link" to={"/"}>Start New Debate</Link>
+  } else if (props.authTested && !props.isLoggedIn && props.link === "/") {
+    return <button className="new-debate-link" onClick={props.facebookLogin}>Start New Debate</button>
+  } else {
+    return null
   }
 }
 
 const Header = (props)=>(
   <header className="main-header">
     <img className="logo" src="./apple-touch-icon.png" />
-    {props.link !== "/" && <Link className="new-debate-link" to={"/"}>Start New Debate</Link>}
+    <NewDebateButton {...props} />
     <div className="auth">
       <Name {...props} />
       <LoginLogout {...props} />
