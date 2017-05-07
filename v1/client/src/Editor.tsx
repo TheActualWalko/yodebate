@@ -6,7 +6,7 @@ export default ({ text, limit, textChanged, submitClicked, placeholder="Write so
       autoFocus 
       onChange={event=>{
         const el = event.nativeEvent.target;
-        textChanged(el["value"].slice(0,limit));
+        textChanged(el["value"].trim().slice(0,limit));
         el["style"].height = "1px";
         el["style"].height = (el.scrollHeight)+"px";
       }} 
