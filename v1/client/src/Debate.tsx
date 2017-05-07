@@ -46,10 +46,12 @@ const renderPositionStatements = ({debateID})=>{
   return <PositionStatements debateID={debateID}/>;
 }
 
-const renderOpeningStatementsAnnotation = ({needPositionStatement})=>{
-  return !needPositionStatement 
-    ? <Annotation title="Opening Statements" subtitle="500 characters each" />
-    : null;
+const renderOpeningStatementsAnnotation = ({needPositionStatement, haveAllOpeningStatements})=>{
+  if (!needPositionStatement && haveAllOpeningStatements) {
+    return <Annotation title="Opening Statements" subtitle="500 characters each" />
+  } else {
+    return null;
+  }
 }
 
 const renderOpeningStatements = ({needPositionStatement, needOpeningStatement, debateID, statementIDs})=>{

@@ -478,6 +478,10 @@ p, .statement textarea, .annotation h5 {
   border-left:10px solid white;
 }
 
+.position-statements+.statement{
+  margin-top:35px
+}
+
 @media screen and (max-width: 1200px){
   .position-statements {
     height: 110px;
@@ -552,7 +556,7 @@ p, .statement textarea, .annotation h5 {
     background-color: #4965e2;
   }
   .annotation-wrap {
-    padding:70px 20px;
+    padding:2px 20px;
   }
   .annotation {
     margin: 0 0;
@@ -613,5 +617,8 @@ p, .statement textarea, .annotation h5 {
   }
   .position-statements .responder-position-statement h3 {
     background-color: #4965e2;
+  }
+  .position-statements+.statement{
+    margin-top:2px;
   }
 }

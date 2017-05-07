@@ -25,49 +25,69 @@ const mapDispatchToProps = (dispatch, {isRebuttal, debateID}) => {
   }
 }
 
-const NewStatement = ({
-  isRebuttal, 
-  authorID, 
-  isInitiatorStatement,
-  newStatementText,
-  textChanged,
-  submitClicked
-})=>(
-  <article 
-    className={`
-      statement 
-      new-statement 
-      ${
-        isInitiatorStatement 
-          ? "initiator-statement" 
-          : "responder-statement"
-      }
-    `} 
-  >
-    <div className="statement-content-wrap">
-      <Author authorID={authorID} />
-      <EditableStatementContent 
-        limit={
-          isRebuttal 
-            ? rebuttalCharLimit 
-            : openingStatementCharLimit
-        }
-        text={newStatementText}
-        textChanged={textChanged}
-        submitClicked={submitClicked}
-        placeholder={isRebuttal ? "Write a rebuttal" : "Write an opening statement"}
-      />
-    </div>
-    <h5 className="instruction">
-      <span>
-        { 
-          isRebuttal 
-            ? "Write your rebuttal" 
-            : "Write your opening statement"
-        }
-      </span>
-    </h5>
-  </article>
-);
+class NewStatement extends React.Component<
+  {
+    isRebuttal: boolean, 
+    authorID: string, 
+    isInitiatorStatement: boolean,
+    newStatementText: string,
+    textChanged: (text: string)=>void,
+    submitClicked: (evt: any)=>void
+  }, 
+  {}
+>{
+  componentDidMount() {
+    const rootElement: any = this.refs["root"];
+    rootElement.scrollIntoView();
+  }
+  render() {
+    const {
+      isRebuttal, 
+      authorID, 
+      isInitiatorStatement,
+      newStatementText,
+      textChanged,
+      submitClicked
+    } = this.props;
+    return (
+      <article 
+        ref="root"
+        className={`
+          statement 
+          new-statement 
+          ${
+            isInitiatorStatement 
+              ? "initiator-statement" 
+              : "responder-statement"
+          }
+        `} 
+      >
+        <div className="statement-content-wrap">
+          <Author authorID={authorID} />
+          <EditableStatementContent 
+            limit={
+              isRebuttal 
+                ? rebuttalCharLimit 
+                : openingStatementCharLimit
+            }
+            text={newStatementText}
+            textChanged={textChanged}
+            submitClicked={submitClicked}
+            placeholder={isRebuttal ? "Write a rebuttal" : "Write an opening statement"}
+          />
+        </div>
+        <h5 className="instruction">
+          <span>
+            { 
+              isRebuttal 
+                ? "Write your rebuttal" 
+                : "Write your opening statement"
+            }
+          </span>
+        </h5>
+      </article>
+    );
+  }
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewStatement) as React.ComponentClass<{debateID: any, isRebuttal: boolean}>;

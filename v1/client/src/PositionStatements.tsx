@@ -8,7 +8,8 @@ import {
   getResponderPositionStatement,
   getActiveAuthorIsInitiator,
   getActiveAuthorIsResponder,
-  getNewStatementText
+  getNewStatementText,
+  getHaveAllOpeningStatements
 } from "./debate-selectors";
 import {setNewStatementText, submitPositionStatement} from "./debate-actions";
 
@@ -18,7 +19,8 @@ const mapStateToProps = createStructuredSelector({
   responderStatement: getResponderPositionStatement,
   activeAuthorIsInitiator: getActiveAuthorIsInitiator,
   activeAuthorIsResponder: getActiveAuthorIsResponder,
-  newStatementText: getNewStatementText
+  newStatementText: getNewStatementText,
+  haveAllOpeningStatements: getHaveAllOpeningStatements
 });
 
 const mapDispatchToProps = (dispatch, {debateID}) => {
@@ -41,7 +43,8 @@ const renderInitiatorStatement = ({
   activeAuthorIsInitiator,
   textChanged,
   submitClicked,
-  newStatementText
+  newStatementText,
+  haveAllOpeningStatements
 }) => {
   if (!!initiatorStatement) {
     return <h3><span>{initiatorStatement}</span></h3>;
@@ -88,10 +91,10 @@ const PositionStatements = (props) => (
     <div className="position-statement initiator-position-statement">
       { renderInitiatorStatement(props) }
     </div>
-    <h4 className="position-statements-vs">vs</h4>
-    <div className="position-statement responder-position-statement">
+    { props.haveAllOpeningStatements && <h4 className="position-statements-vs">vs</h4> }
+    { props.haveAllOpeningStatements && <div className="position-statement responder-position-statement">
       { renderResponderStatement(props) }
-    </div>
+    </div> }
   </header>
 );
 
