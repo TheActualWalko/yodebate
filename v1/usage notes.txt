@@ -21,7 +21,7 @@
 
 - Paste a link to a user's profile to allow only them to become the responder
 
-- Open debate: state a position, and everyone who bites at it starts a new debate with you.
+- Debate Proposal: state a position, and everyone who bites at it starts a new debate with you.
   - This can be the single way that debates work!! This solves the 'select a responder' problem - just continue the debate that your responder starts
   - Debates are now a child of a "proposal" or something; one proposal contains many responses.
     - A user creates a proposal with only a position statement
