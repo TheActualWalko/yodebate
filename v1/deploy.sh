@@ -15,7 +15,7 @@ scp ./client/android-chrome-512x512.png root@sam-watkinson.com:/var/www/yodebate
 scp ./client/apple-touch-icon.png root@sam-watkinson.com:/var/www/yodebate/public/apple-touch-icon.png;
 scp ./client/favicon-16x16.png root@sam-watkinson.com:/var/www/yodebate/public/favicon-16x16.png;
 scp ./client/favicon-32x32.png root@sam-watkinson.com:/var/www/yodebate/public/favicon-32x32.png;
-scp ./client/favicon.png root@sam-watkinson.com:/var/www/yodebate/public/favicon.png;
+scp ./client/favicon-base.png root@sam-watkinson.com:/var/www/yodebate/public/favicon-base.png;
 scp ./client/mstile-150x150.png root@sam-watkinson.com:/var/www/yodebate/public/mstile-150x150.png;
 scp ./client/dist/bundle.js root@sam-watkinson.com:/var/www/yodebate/public/dist/bundle.js;
 scp ./client/dist/vendor.bundle.js root@sam-watkinson.com:/var/www/yodebate/public/dist/vendor.bundle.js;
