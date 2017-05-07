@@ -5,7 +5,7 @@ export default ({ text, limit, textChanged, submitClicked, placeholder="Write so
     <textarea 
       autoFocus 
       onChange={event=>{
-        const el = event.nativeEvent.target;
+        const el: any = event.nativeEvent.target;
         textChanged(el["value"].slice(0,limit));
         el["style"].height = "1px";
         el["style"].height = (el.scrollHeight)+"px";
