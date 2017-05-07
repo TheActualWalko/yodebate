@@ -8,7 +8,7 @@ export default ({ text, limit, textChanged, submitClicked, placeholder="Write so
         const el = event.nativeEvent.target;
         textChanged(el["value"].slice(0,limit));
         el["style"].height = "1px";
-        el["style"].height = (25+el.scrollHeight)+"px";
+        el["style"].height = (el.scrollHeight)+"px";
       }} 
       value={text} 
       rows={Math.ceil(text.length/37.5) || 1} 
