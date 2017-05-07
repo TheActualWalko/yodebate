@@ -91,8 +91,8 @@ const PositionStatements = (props) => (
     <div className="position-statement initiator-position-statement">
       { renderInitiatorStatement(props) }
     </div>
-    { props.haveAllOpeningStatements && <h4 className="position-statements-vs">vs</h4> }
-    { props.haveAllOpeningStatements && <div className="position-statement responder-position-statement">
+    { (props.haveAllOpeningStatements || props.activeAuthorIsResponder) && <h4 className="position-statements-vs">vs</h4> }
+    { (props.haveAllOpeningStatements || props.activeAuthorIsResponder) && <div className="position-statement responder-position-statement">
       { renderResponderStatement(props) }
     </div> }
   </header>
