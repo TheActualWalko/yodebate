@@ -3,11 +3,13 @@ import {connect} from "react-redux";
 import {createStructuredSelector} from "reselect";
 import {getIsLoggedIn, getName, getAuthTested} from "./author-selectors";
 import {facebookLogin, facebookLogout} from "./author-actions";
+import {Link} from "react-router";
 
 const mapStateToProps = createStructuredSelector({
   isLoggedIn: getIsLoggedIn,
   authTested: getAuthTested,
-  name: getName
+  name: getName,
+  link: (state)=>state.get("routing").locationBeforeTransitions.pathname
 });
 
 const mapDispatchToProps = {facebookLogin, facebookLogout};
@@ -35,6 +37,7 @@ const LoginLogout = (props)=>{
 const Header = (props)=>(
   <header className="main-header">
     <img className="logo" src="./apple-touch-icon.png" />
+    {props.link !== "/" && <Link className="new-debate-link" to={"/"}>Start New Debate</Link>}
     <div className="auth">
       <Name {...props} />
       <LoginLogout {...props} />

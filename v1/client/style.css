@@ -350,26 +350,38 @@ p, .statement textarea, .annotation h5 {
   right: 15px;
 }
 
+
 .new-statement footer button,
-.editor footer button {
+.editor footer button,
+.main-header .new-debate-link {
+  display: inline-block;
   border: none;
-  padding: 0;
   background: none;
   color: #4990e2;
   padding: 10px 15px;
-  position: absolute;
-  left: 50%;
   font-size: 16px;
-  bottom: -10px;
-  width: 90px;
   text-align: center;
-  margin-left: -45px;
 }
 
+.main-header .new-debate-link {
+  margin: 5px 0 15px 0;
+  float:right;
+}
+
+.main-header .new-debate-link:hover,
 .new-statement footer button:hover,
 .editor footer button:hover {
   cursor: pointer;
   background-color: rgba(73, 144, 226, 0.2);
+}
+
+.new-statement footer button,
+.editor footer button {
+  position: absolute;
+  left: 50%;
+  bottom: -10px;
+  width: 90px;
+  margin-left: -45px;
 }
 
 .author {
