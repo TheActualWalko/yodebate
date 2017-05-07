@@ -47,7 +47,7 @@ const renderInitiatorStatement = ({
   haveAllOpeningStatements
 }) => {
   if (!!initiatorStatement) {
-    return <h3><span>{initiatorStatement}</span></h3>;
+    return <h3><span>{initiatorStatement.trim()}</span></h3>;
   } else if (activeAuthorIsInitiator) {
     return <Editor 
       text={newStatementText} 
@@ -70,7 +70,7 @@ const renderResponderStatement = ({
   newStatementText
 }) => {
   if (!!responderStatement) {
-    return <h3><span>{responderStatement}</span></h3>;
+    return <h3><span>{responderStatement.trim()}</span></h3>;
   } else if (activeAuthorIsResponder) {
     return <Editor 
       text={newStatementText} 

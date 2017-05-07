@@ -13,7 +13,7 @@ const StatementContent = ({statementID, text, date, permalink})=>(
   <div className="statement-content">
     <div className="statement-text">
       <main>
-        <p>{text}</p>
+        <p>{text.trim()}</p>
       </main>
       <footer>
         <a href={permalink}>Permalink</a>
