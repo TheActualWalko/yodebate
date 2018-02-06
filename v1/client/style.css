@@ -611,7 +611,7 @@ p, .statement textarea, .annotation h5 {
   }
   .position-statements .position-statement h3,
   .position-statements .position-statement .editor {
-    position: static;
+    position: relative;
     font-size: 20px;
     min-height: 90px;
     height: auto;
@@ -644,6 +644,9 @@ p, .statement textarea, .annotation h5 {
   }
   .position-statements .responder-position-statement h3 {
     background-color: #4965e2;
+  }
+  .position-statements .advice {
+    color: rgba(255,255,255,0.5);
   }
   .position-statements+.statement{
     margin-top:2px;
